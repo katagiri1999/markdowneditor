@@ -23,7 +23,7 @@ function Explorer() {
   const [hasInitialized, setHasInitialized] = useState(false);
 
   useEffect(() => {
-    if (url_node_id === undefined) return;
+    if (!url_node_id) return;
     const timer = setTimeout(() => {
       setCurrentNodeId(url_node_id || "");
     }, 0);
