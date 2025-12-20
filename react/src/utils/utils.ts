@@ -1,4 +1,4 @@
-import type {APIResponse} from '../types/types';
+import type { APIResponse, TreeNode } from '../types/types';
 
 export default {
   requests,
@@ -25,8 +25,7 @@ async function requests(
   console.log(`[${method}]: ${url}`);
   console.log({ url, method, headers, params });
 
-  let detail: RequestInit;
-
+  let detail;
   if (method === "GET" || method === "DELETE") {
     detail = {
       method,
@@ -51,12 +50,6 @@ async function requests(
   console.log(result);
   console.groupEnd();
   return result;
-}
-
-interface TreeNode {
-  id: string;
-  label: string;
-  children?: TreeNode[];
 }
 
 function get_url_node_id(): string | null {
