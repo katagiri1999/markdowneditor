@@ -1,0 +1,112 @@
+/* ツールバー */
+.editor-toolbar button {
+  border: none;
+  color: #333;
+  padding: 6px 10px;
+  margin: 2px;
+  border-radius: 6px;
+  transition: background-color 0.5s ease;
+
+  &.active {
+    background-color: #b0b0b0;
+    color: #474747;
+  }
+}
+
+/* 編集画面 */
+.CodeMirror-code * {
+  font-size: 14px !important;
+  font-weight: normal !important;
+  color: #2d2d2d !important;
+  text-decoration: none !important;
+  font-style: normal !important;
+}
+
+/* プレビュー全体 */
+.editor-preview {
+  padding: 1rem;
+  line-height: 1.6;
+
+  /* H1 */
+  h1 {
+    font-size: 2rem;
+    margin-top: 0.5rem;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 0.3rem;
+  }
+
+  /* H2 */
+  h2 {
+    font-size: 1.6rem;
+    margin-top: 0.3rem;
+    padding-bottom: 0.2rem;
+  }
+
+  /* H3 */
+  h3 {
+    font-size: 1.3rem;
+    margin-top: 0.1rem;
+  }
+
+  /* インラインコード */
+  code {
+    background-color: #d3d3d3;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: "Fira Code", monospace;
+  }
+
+  /* コードブロック */
+  pre code {
+    background-color: #d3d3d3;
+    padding: 1rem;
+    border-radius: 6px;
+    display: block;
+    overflow-x: auto;
+    font-family: "Fira Code", monospace;
+    color: #2d2d2d;
+  }
+
+  /* テーブル */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 0.6rem;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+  }
+
+  /* 引用 */
+  blockquote {
+    border-left: 4px solid #949899;
+    background-color: #ededed;
+    padding: 0.2rem 1rem;
+    margin: 0.2rem 0;
+    color: #555;
+    border-radius: 4px;
+  }
+
+  /* 水平線 */
+  hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 2rem 0;
+  }
+
+  /* リンク */
+  a {
+    color: #007acc;
+    text-decoration: underline;
+  }
+}
