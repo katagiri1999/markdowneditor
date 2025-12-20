@@ -7,7 +7,7 @@ resource "aws_lambda_function" "fastapi_lambda" {
   source_code_hash = filebase64sha256("${path.module}/../build/deploy.zip")
   timeout          = 30
   tags = {
-    Name = "cork-up"
+    Name = "cloudjex"
   }
 }
 
