@@ -2,7 +2,6 @@ import type { APIResponse, TreeNode } from '../types/types';
 
 export default {
   requests,
-  get_url_node_id,
   get_node,
   get_parent_node_id,
   get_parent_node_ids,
@@ -50,12 +49,6 @@ async function requests(
   console.log(result);
   console.groupEnd();
   return result;
-}
-
-function get_url_node_id(): string | null {
-  const params = new URLSearchParams(location.search);
-  const node_id = params.get("node_id");
-  return node_id;
 }
 
 function get_node(tree: TreeNode, node_id: string): TreeNode | null {

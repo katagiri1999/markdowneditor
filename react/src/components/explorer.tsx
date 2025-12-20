@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Typography from '@mui/material/Typography';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import userStore from "../store/user_store";
 import utils from "../utils/utils";
@@ -14,10 +14,14 @@ import TreeUpdate from './tree_update';
 
 function Explorer() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { id_token, tree } = userStore();
   const [expandedItems, setExpandedItems] = useState(["/Folder"]);
 
-  const url_node_id = utils.get_url_node_id() || "/Folder";
+  const searchParams = new URLSearchParams(location.search);
+  const url_node_id = searchParams.get('node_id') || "/Folder";
+
   const parents = utils.get_parent_node_ids(url_node_id);
   const displayedExpanded = [...new Set([...expandedItems, ...parents])];
 
