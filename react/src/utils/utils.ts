@@ -9,8 +9,6 @@ export default {
   is_valid_new_node,
 };
 
-type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-
 interface APIResponse<T = unknown> {
   status: number;
   headers: Headers;
@@ -19,7 +17,7 @@ interface APIResponse<T = unknown> {
 
 async function requests(
   url: string,
-  method: HTTPMethod,
+  method: string,
   headers: Record<string, string>,
   params: Record<string, string>
 ): Promise<APIResponse> {
@@ -65,28 +63,25 @@ interface TreeNode {
   children?: TreeNode[];
 }
 
-function get_url_node_id(): string {
+function get_url_node_id(): string | null {
   const params = new URLSearchParams(location.search);
   const node_id = params.get("node_id");
-  if (!node_id) {
-    throw new Error(`can't find node_id`);
-  };
   return node_id;
 }
 
-function get_node(tree: TreeNode, node_id: string): TreeNode {
+function get_node(tree: TreeNode, node_id: string): TreeNode | null {
   let parts = node_id.split("/");
   parts = parts.filter((part) => part && part !== "Folder");
 
   let current: TreeNode = tree;
   for (const part of parts) {
     if (!Array.isArray(current.children)) {
-      throw new Error(`current not have children: node_id=${node_id}`);
+      return null;
     };
 
     const next = current.children.find((child: TreeNode) => child.label === part);
     if (!next) {
-      throw new Error(`can't find next: node_id=${node_id}`);
+      return null;
     };
 
     current = next;
@@ -117,6 +112,10 @@ function insert_node(tree: TreeNode, insert_node: TreeNode): TreeNode {
   const parent_id = get_parent_node_id(insert_node.id);
   const parent = get_node(tree, parent_id);
 
+  if (!parent) {
+    throw new Error(`parent is null`);
+  };
+
   parent.children = parent.children ?? [];
   parent.children.push(insert_node);
   return tree;
@@ -125,8 +124,8 @@ function insert_node(tree: TreeNode, insert_node: TreeNode): TreeNode {
 function delete_tree_node(tree: TreeNode, target_id: string): TreeNode {
   const parent_id = get_parent_node_id(target_id);
   const parent = get_node(tree, parent_id);
-  if (!parent.children) {
-      throw new Error(`can't find children: target_id=${target_id}`);
+  if (!parent || !parent.children) {
+    throw new Error(`can't find children: target_id=${target_id}`);
   };
 
   parent.children = parent.children.filter((child) => child.id !== target_id);
@@ -140,6 +139,11 @@ function is_valid_new_node(tree: TreeNode, insert_node: TreeNode): boolean {
 
   const parent_id = get_parent_node_id(insert_node.id);
   const parent = get_node(tree, parent_id);
+
+  if (!parent) {
+    throw new Error(`parent is null`);
+  };
+
   const siblings = parent.children ?? [];
   return !siblings.some((child) => child.label === insert_node.label);
 }
