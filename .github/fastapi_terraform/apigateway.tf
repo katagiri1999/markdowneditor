@@ -1,10 +1,10 @@
 resource "aws_api_gateway_rest_api" "rest_api" {
-  name = "cloudjex-apigateway"
+  name = "${var.project_name}-apigateway"
   endpoint_configuration {
     types = ["EDGE"]
   }
   tags = {
-    Name = "cloudjex"
+    Name = "${var.project_name}"
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_lambda_permission" "apigw_invoke" {
 }
 
 resource "aws_api_gateway_domain_name" "custom_domain" {
-  domain_name     = "api.cloudjex.com"
+  domain_name     = "${var.custom_domain}"
   certificate_arn = "arn:aws:acm:us-east-1:736798815711:certificate/da7c6c5c-cb24-4559-871a-724a26dbcff0"
 
   endpoint_configuration {
@@ -58,7 +58,7 @@ resource "aws_api_gateway_domain_name" "custom_domain" {
   }
 
   tags = {
-    Name = "cloudjex"
+    Name = "${var.project_name}"
   }
 }
 

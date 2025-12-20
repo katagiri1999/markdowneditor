@@ -18,7 +18,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   origin {
-    domain_name              = "${aws_s3_bucket.frontend.bucket}.s3.amazonaws.com"
+    domain_name              = "${aws_s3_bucket.bucket.bucket}.s3.amazonaws.com"
     origin_id                = "s3-frontend-origin"
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
