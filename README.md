@@ -1,14 +1,13 @@
 # Cork-Up
 
 ## CICD Status
-[![CICD](https://github.com/katagiri1999/cork-up/actions/workflows/cicd.yaml/badge.svg)](https://github.com/katagiri1999/cork-up/actions/workflows/cicd.yaml)
+[![CICD Workflow](https://github.com/katagiri1999/markdowneditor/actions/workflows/cicd.yaml/badge.svg)](https://github.com/katagiri1999/markdowneditor/actions/workflows/cicd.yaml)
 
 ## Sample Application URL
-https://www.cork-up.net
+https://www.cloudjex.com
 
 ## Summary
-Cork-Up用のPublicRepositoryです。Markdown管理ツールを開発しています。  
-Serverless Architectureを使用した、シンプルなFrontend/Backend構成となります。
+markdown管理アプリ用のPublicRepositoryです。  Serverless Architectureを使用した、シンプルなFrontend/Backend構成となります。
 Serverlessを採用することで、非常に安価に構築/運用しています。  
 OSS Applicationとして公開しておりますので、気軽にご利用ください。
 
@@ -38,7 +37,7 @@ OSS Applicationとして公開しておりますので、気軽にご利用く�
 <br>
 
 Architecture
-![drowio](cork-up.drawio.svg)
+![drowio](markdowneditor.drawio.svg)
 
 ## Table Design
 
