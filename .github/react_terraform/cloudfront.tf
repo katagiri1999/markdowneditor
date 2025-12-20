@@ -1,6 +1,5 @@
 resource "aws_cloudfront_origin_access_control" "oac" {
-  name                              = "cloudjex-oac"
-  description                       = "OAC for cloudjex frontend"
+  name                              = "${var.project_name}-oac"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
@@ -10,7 +9,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   enabled             = true
   default_root_object = "index.html"
 
-  aliases = ["www.cloudjex.com"]
+  aliases = ["${var.custom_domain}"]
 
   viewer_certificate {
     acm_certificate_arn      = "arn:aws:acm:us-east-1:736798815711:certificate/da7c6c5c-cb24-4559-871a-724a26dbcff0"
@@ -55,6 +54,6 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   tags = {
-    Name = "cloudjex"
+    Name = "${var.project_name}"
   }
 }
