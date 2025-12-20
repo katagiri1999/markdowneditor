@@ -7,7 +7,7 @@ resource "aws_lambda_function" "fastapi_lambda" {
   source_code_hash = filebase64sha256("${path.module}/../build/deploy.zip")
   timeout          = 30
   tags = {
-    Name : "cork-up"
+    Name = "cork-up"
   }
 }
 
@@ -15,6 +15,6 @@ resource "aws_cloudwatch_log_group" "lambda_log_group" {
   name              = "/aws/lambda/${aws_lambda_function.fastapi_lambda.function_name}"
   retention_in_days = 30
   tags = {
-    Name : "cloudjex"
+    Name = "cloudjex"
   }
 }

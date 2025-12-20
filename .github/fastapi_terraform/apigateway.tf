@@ -4,7 +4,7 @@ resource "aws_api_gateway_rest_api" "rest_api" {
     types = ["EDGE"]
   }
   tags = {
-    Name : "cloudjex"
+    Name = "cloudjex"
   }
 }
 
@@ -49,6 +49,29 @@ resource "aws_lambda_permission" "apigw_invoke" {
   source_arn    = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/*"
 }
 
+resource "aws_api_gateway_domain_name" "custom_domain" {
+  domain_name     = "api.cloudjex.com"
+  certificate_arn = "arn:aws:acm:us-east-1:736798815711:certificate/da7c6c5c-cb24-4559-871a-724a26dbcff0"
+
+  endpoint_configuration {
+    types = ["EDGE"]
+  }
+
+  tags = {
+    Name = "cloudjex"
+  }
+}
+
+resource "aws_api_gateway_base_path_mapping" "custom_mapping" {
+  api_id      = aws_api_gateway_rest_api.rest_api.id
+  domain_name = aws_api_gateway_domain_name.custom_domain.domain_name
+  stage_name  = aws_api_gateway_stage.stage.stage_name
+}
+
 output "api_endpoint" {
   value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.us-east-1.amazonaws.com/api"
+}
+
+output "custom_api_url" {
+  value = "https://${aws_api_gateway_domain_name.custom_domain.domain_name}"
 }

@@ -55,7 +55,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   tags = {
-    Name : "cloudjex"
+    Name = "cloudjex"
   }
 }
 
