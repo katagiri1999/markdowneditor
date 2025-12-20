@@ -65,23 +65,30 @@ interface TreeNode {
   children?: TreeNode[];
 }
 
-function get_url_node_id(): string | null {
+function get_url_node_id(): string {
   const params = new URLSearchParams(location.search);
-  return params.get("node_id");
+  const node_id = params.get("node_id");
+  if (!node_id) {
+    throw new Error(`can't find node_id`);
+  };
+  return node_id;
 }
 
-function get_node(tree: TreeNode, node_id: string): TreeNode | null {
+function get_node(tree: TreeNode, node_id: string): TreeNode {
   const parts = node_id
     .split("/")
     .filter((part) => part && part !== "Folder");
 
   let current: TreeNode = tree;
   for (const part of parts) {
-    if (!current || !Array.isArray(current.children)) return null;
+    if (!current || !Array.isArray(current.children)) {
+      throw new Error(`current is invalid: node_id=${node_id}`);
+    };
 
-    if (!Array.isArray(current.children)) return null;
-    const next: TreeNode | null = current.children.find((child: TreeNode) => child.label === part) ?? null;
-    if (!next) return null;
+    const next = current.children.find((child: TreeNode) => child.label === part);
+    if (!next) {
+      throw new Error(`can't find next: node_id=${node_id}`);
+    };
 
     current = next;
   }
@@ -96,8 +103,6 @@ function get_parent_node_id(node_id: string): string {
 }
 
 function get_parent_node_ids(node_id: string): string[] {
-  if (!node_id) return [];
-
   const parts = node_id.split("/").filter(Boolean);
   if (parts.length <= 1) return [];
 
@@ -112,9 +117,8 @@ function get_parent_node_ids(node_id: string): string[] {
 function insert_node(tree: TreeNode, insert_node: TreeNode): TreeNode {
   const parent_id = get_parent_node_id(insert_node.id);
   const parent = get_node(tree, parent_id);
-  if (!parent) return tree;
 
-  parent.children = parent.children ?? []
+  parent.children = parent.children ?? [];
   parent.children.push(insert_node);
   return tree;
 }
@@ -122,19 +126,21 @@ function insert_node(tree: TreeNode, insert_node: TreeNode): TreeNode {
 function delete_tree_node(tree: TreeNode, target_id: string): TreeNode {
   const parent_id = get_parent_node_id(target_id);
   const parent = get_node(tree, parent_id);
-  if (!parent || !parent.children) return tree;
+  if (!parent.children) {
+      throw new Error(`can't find children: target_id=${target_id}`);
+  };
 
   parent.children = parent.children.filter((child) => child.id !== target_id);
   return tree;
 }
 
 function is_valid_new_node(tree: TreeNode, insert_node: TreeNode): boolean {
-  if (!insert_node.id || !insert_node.label) return false;
+  if (!insert_node.id || !insert_node.label) {
+    return false;
+  };
 
   const parent_id = get_parent_node_id(insert_node.id);
   const parent = get_node(tree, parent_id);
-  if (!parent) return false;
-
   const siblings = parent.children ?? [];
   return !siblings.some((child) => child.label === insert_node.label);
 }

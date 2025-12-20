@@ -18,9 +18,9 @@ function Breadcrumb() {
     const parents = utils.get_parent_node_ids(url_node_id) || [];
 
     const nodes = [
-      ...parents.map((id) => utils.get_node(tree, id)).filter(Boolean),
+      ...parents.map((id) => utils.get_node(tree, id)),
       utils.get_node(tree, url_node_id),
-    ].filter(Boolean);
+    ];
 
     parentNodes = nodes;
   }
@@ -35,7 +35,7 @@ function Breadcrumb() {
           href={`/main?node_id=${node.id}`}
           aria-current={index === parentNodes.length - 1 ? "page" : undefined}
         >
-          {node.label || node.id}
+          {node.label}
         </Link>
       ))}
     </Breadcrumbs>
