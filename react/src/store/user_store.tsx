@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import type { TreeNode } from "../types/tree";
+import type { TreeNode } from "../types/types";
 
 interface UserState {
   email: string;

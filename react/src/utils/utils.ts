@@ -1,3 +1,5 @@
+import type {APIResponse} from '../types/types';
+
 export default {
   requests,
   get_url_node_id,
@@ -9,17 +11,11 @@ export default {
   is_valid_new_node,
 };
 
-interface APIResponse<T = unknown> {
-  status: number;
-  headers: Headers;
-  body: T;
-}
-
 async function requests(
   url: string,
   method: string,
   headers: Record<string, string>,
-  params: Record<string, string>
+  params: unknown
 ): Promise<APIResponse> {
   if (!headers["Content-Type"]) {
     headers["Content-Type"] = "application/json";
@@ -36,7 +32,7 @@ async function requests(
       method,
       headers,
     };
-    url = `${url}?${new URLSearchParams(params)}`;
+    url = `${url}?${new URLSearchParams(params as Record<string, string>)}`;
   } else {
     detail = {
       method,

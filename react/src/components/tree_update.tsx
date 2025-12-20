@@ -8,7 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import userStore from '../store/user_store';
@@ -16,7 +16,9 @@ import utils from "../utils/utils";
 
 import Loading from './loading';
 
-function TreeUpdate(props) {
+import type { TreeNode } from "../types/types";
+
+function TreeUpdate(props: { currentNodeId: string }) {
   const navigate = useNavigate();
 
   const { id_token, tree, setTree } = userStore();
@@ -25,12 +27,7 @@ function TreeUpdate(props) {
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [delModalOpen, setDelModalOpen] = useState(false);
   const [isInvalidId, setIsInvalidId] = useState(false);
-  const [currentNodeId, setCurrentNodeId] = useState("");
   const [newContentName, setNewContentName] = useState("");
-
-  useEffect(() => {
-    setCurrentNodeId(props.currentNodeId);
-  }, [props.currentNodeId]);
 
   const onClickPostModal = () => {
     setNewContentName("");
@@ -49,9 +46,12 @@ function TreeUpdate(props) {
   };
 
   const clickCreateNewContent = async () => {
-    const insert_node = { id: `${currentNodeId}/${newContentName}`, label: newContentName };
+    if (!tree) {
+      throw new Error(`tree is null`);
+    };
 
-    var isValid = utils.is_valid_new_node(tree, insert_node);
+    const insert_node = { id: `${props.currentNodeId}/${newContentName}`, label: newContentName };
+    const isValid = utils.is_valid_new_node(tree, insert_node);
     if (!isValid) {
       setIsInvalidId(true);
       return;
@@ -62,15 +62,16 @@ function TreeUpdate(props) {
     setLoading(true);
     closeModal();
 
-    var res = utils.requests(
+    const res_promise = utils.requests(
       `${import.meta.env.VITE_API_HOST}/trees`,
       "PUT",
       { authorization: `Bearer ${id_token}` },
       { tree: new_tree }
     );
-    res = await res;
+    const res = await res_promise;
 
-    setTree(res.body.tree);
+    const body = res.body as { tree: TreeNode };
+    setTree(body.tree);
     setLoading(false);
   };
 
@@ -78,19 +79,20 @@ function TreeUpdate(props) {
     setLoading(true);
     closeModal();
 
-    var parents = utils.get_parent_node_ids(currentNodeId);
+    const parents = utils.get_parent_node_ids(props.currentNodeId);
     const next_current_id = parents[parents.length - 1];
-    var new_tree = utils.delete_tree_node(tree, currentNodeId);
+    const new_tree = utils.delete_tree_node(tree as TreeNode, props.currentNodeId);
 
-    var res = utils.requests(
+    const res_promise = utils.requests(
       `${import.meta.env.VITE_API_HOST}/trees`,
       "PUT",
       { authorization: `Bearer ${id_token}` },
       { tree: new_tree }
     );
-    res = await res;
+    const res = await res_promise;
 
-    setTree(res.body.tree);
+    const body = res.body as { tree: TreeNode };
+    setTree(body.tree);
     setLoading(false);
     navigate(`/main?node_id=${next_current_id}`);
   };
@@ -130,7 +132,7 @@ function TreeUpdate(props) {
             label="フォルダ名"
             variant="outlined"
             disabled
-            value={`${currentNodeId}/`}
+            value={`${props.currentNodeId}/`}
           />
           <TextField
             id="outlined-basic"

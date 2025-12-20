@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import userStore from '../store/user_store';
 import utils from '../utils/utils';
 
-import type { TreeNode } from "../types/tree";
+import type { TreeNode } from "../types/types";
 
 function Breadcrumb() {
   const { tree } = userStore();
