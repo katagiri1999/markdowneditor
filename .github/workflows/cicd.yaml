@@ -81,6 +81,15 @@ jobs:
         working-directory: ./.github/react_terraform
         run: terraform apply -auto-approve
 
+      - name: Get Terraform Output
+        id: tf_output
+        working-directory: ./.github/react_terraform
+        run: |
+          terraform_output=$(terraform output -json)
+          echo $terraform_output
+          value=$(echo "$terraform_output" | jq -r '.cloudfront_id.value')
+          echo $value
+
       - name: Copy Objects
         working-directory: ./react
         run: aws s3 cp ./dist "s3://${{ env.AWS_S3_BUCKET }}" --recursive
