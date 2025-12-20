@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import Header from "../components/header";
@@ -17,23 +17,17 @@ function Login() {
   const [isLoginError, setLoginError] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  useEffect(() => {
-    userStore.getState().reset();
-    setLoginError(false);
-    setLoading(false);
-  }, []);
-
-  const handleEmailChange = (event) => {
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
 
-  const handlePwChange = (event) => {
+  const handlePwChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
 
   const onClickSignin = async () => {
     setLoading(true);
-    var res = await utils.requests(
+    const res_promise = utils.requests(
       `${import.meta.env.VITE_API_HOST}/login`,
       "POST",
       {},
@@ -42,15 +36,18 @@ function Login() {
         password: password,
       }
     );
+    const res = await res_promise;
 
     if (res.status != 200) {
       setLoginError(true);
-    } else {
-      setLoginError(false);
-      setPassword("");
-      setIdToken(res.body.id_token);
-      navigate("/main?node_id=/Folder");
+      setLoading(false);
+      throw new Error(`login error`);
     };
+
+    setPassword("");
+    const body = res.body as { id_token: string };
+    setIdToken(body.id_token);
+    navigate("/main?node_id=/Folder");
 
     setLoading(false);
   };
