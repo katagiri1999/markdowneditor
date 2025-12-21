@@ -69,14 +69,6 @@ def put(params) -> dict:
                 "error_code": "func_nodes.missing_parameters",
             })
 
-        item = dynamodbs.get_node(email, node_id)
-        if item:
-            raise Exception({
-                "status_code": 409,
-                "exception": "Conflict",
-                "error_code": "func_nodes.already_exists",
-            })
-
         dynamodbs.post_node(email, node_id, text)
 
         return {

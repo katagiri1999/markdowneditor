@@ -149,23 +149,6 @@ class TestFailPut:
         logger(response)
         assert response["status_code"] == 400
 
-    def test_func_nodes_put_conflict(self, id_token):
-        params = {
-            "method": "PUT",
-            "headers": {
-                "content-type": "application/json",
-                "authorization": f"Bearer {id_token}"
-            },
-            "body": {
-                "node_id": f"{PUT_NODE_ID}",
-                "text": f"#{PUT_NODE_ID}",
-            },
-            "query_params": {},
-        }
-        response = func_nodes.main(params)
-        logger(response)
-        assert response["status_code"] == 409
-
 
 class TestSuccessDelete:
     def test_func_nodes_delete_normal(self, id_token):
