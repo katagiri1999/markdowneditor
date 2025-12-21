@@ -13,6 +13,7 @@ import utils from "../utils/utils";
 
 function Login() {
   const navigate = useNavigate();
+
   const { email, setEmail, password, setPassword, setIdToken } = userStore();
   const { setLoading } = loadingState();
   const [isLoginError, setLoginError] = useState(false);
@@ -27,6 +28,7 @@ function Login() {
 
   const onClickSignin = async () => {
     setLoading(true);
+
     const res_promise = utils.requests(
       `${import.meta.env.VITE_API_HOST}/login`,
       "POST",
@@ -47,9 +49,8 @@ function Login() {
     setPassword("");
     const body = res.body as { id_token: string };
     setIdToken(body.id_token);
-    navigate("/main?node_id=/Folder");
-
     setLoading(false);
+    navigate("/main?node_id=/Folder");
   };
 
   return (

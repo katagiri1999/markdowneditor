@@ -16,6 +16,7 @@ function Main() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+
       const res_promise = utils.requests(
         `${import.meta.env.VITE_API_HOST}/trees`,
         "GET",
@@ -23,8 +24,8 @@ function Main() {
         {}
       );
       const res = await res_promise;
-
       const body = res.body as { tree: TreeNode };
+
       setTree(body.tree);
       setLoading(false);
     };

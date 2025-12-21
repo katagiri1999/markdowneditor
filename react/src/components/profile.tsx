@@ -43,16 +43,16 @@ function Profile() {
 
   const logOutClick = async () => {
     setOpenLogoutDialog(false);
-
     setLoading(true);
+
     await utils.requests(
       `${import.meta.env.VITE_API_HOST}/logout`,
       "POST",
       { authorization: `Bearer ${id_token}` },
       {}
     );
-    setLoading(false);
 
+    setLoading(false);
     reset();
     navigate("/");
   };

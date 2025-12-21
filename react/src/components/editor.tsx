@@ -12,14 +12,14 @@ import userStore from '../store/user_store';
 import utils from "../utils/utils";
 
 export const Editor = () => {
-  const location = useLocation();
   const { id_token } = userStore();
   const { setLoading } = loadingState();
 
-  const [markdownValue, setMarkdownValue] = useState("");
-
+  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const url_node_id = searchParams.get('node_id');
+
+  const [markdownValue, setMarkdownValue] = useState("");
 
   useEffect(() => {
     const fetchNode = async () => {

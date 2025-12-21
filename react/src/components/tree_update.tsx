@@ -56,11 +56,10 @@ function TreeUpdate(props: { currentNodeId: string }) {
       return;
     }
 
-    const new_tree = utils.insert_node(tree, insert_node);
-
-    setLoading(true);
     closeModal();
+    setLoading(true);
 
+    const new_tree = utils.insert_node(tree, insert_node);
     const res_promise = utils.requests(
       `${import.meta.env.VITE_API_HOST}/trees`,
       "PUT",
@@ -68,15 +67,15 @@ function TreeUpdate(props: { currentNodeId: string }) {
       { tree: new_tree }
     );
     const res = await res_promise;
-
     const body = res.body as { tree: TreeNode };
+
     setTree(body.tree);
     setLoading(false);
   };
 
   const clickDeleteContent = async () => {
-    setLoading(true);
     closeModal();
+    setLoading(true);
 
     const parents = utils.get_parent_node_ids(props.currentNodeId);
     const next_current_id = parents[parents.length - 1];
@@ -89,8 +88,8 @@ function TreeUpdate(props: { currentNodeId: string }) {
       { tree: new_tree }
     );
     const res = await res_promise;
-
     const body = res.body as { tree: TreeNode };
+
     setTree(body.tree);
     setLoading(false);
     navigate(`/main?node_id=${next_current_id}`);
