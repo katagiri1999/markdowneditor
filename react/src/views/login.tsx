@@ -48,7 +48,6 @@ function Login() {
 
     const body = res.body as { id_token: string };
     setIdToken(body.id_token);
-    setLoading(false);
     navigate("/main?node_id=/Folder");
   };
 
