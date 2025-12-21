@@ -34,7 +34,7 @@ function Breadcrumb() {
             key={node.id}
             underline="hover"
             color={index === parentNodes.length - 1 ? "text.primary" : "inherit"}
-            href={`/main?node_id=${node.id}`}
+            href={index === parentNodes.length - 1 ? undefined : `/main?node_id=${node.id}`}
             aria-current={index === parentNodes.length - 1 ? "page" : undefined}
           >
             {node.label}
