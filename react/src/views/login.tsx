@@ -46,7 +46,6 @@ function Login() {
       throw new Error(`login error`);
     };
 
-    setPassword("");
     const body = res.body as { id_token: string };
     setIdToken(body.id_token);
     setLoading(false);

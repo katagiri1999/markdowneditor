@@ -41,7 +41,7 @@ function Profile() {
     handleMenuClose();
   };
 
-  const logOutClick = async () => {
+  const logoutClick = async () => {
     setOpenLogoutDialog(false);
     setLoading(true);
 
@@ -101,7 +101,7 @@ function Profile() {
             <b>{email}</b> からログアウトしますか？
           </DialogTitle>
           <DialogActions>
-            <Button onClick={logOutClick}>はい</Button>
+            <Button onClick={logoutClick}>はい</Button>
           </DialogActions>
         </Dialog>
       </>
