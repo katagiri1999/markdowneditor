@@ -10,16 +10,16 @@ import Tooltip from '@mui/material/Tooltip';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
+import loadingState from "../store/loading_store";
 import userStore from '../store/user_store';
 import utils from "../utils/utils";
-
-import Loading from './loading';
 
 function Profile() {
   const navigate = useNavigate();
 
   const { email, id_token, reset } = userStore();
-  const [isLoading, setLoading] = useState(false);
+  const { setLoading } = loadingState();
+
   const [isMenuOpen, setIsMenuOpen] = useState<null | HTMLElement>(null);
   const [isOpenLogoutDialog, setOpenLogoutDialog] = useState(false);
 
@@ -60,8 +60,6 @@ function Profile() {
   if (id_token && email) {
     return (
       <>
-        <Loading loading={isLoading} />
-
         <IconButton
           color="inherit"
           onClick={handleMenuOpen}

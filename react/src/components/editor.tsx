@@ -2,21 +2,20 @@ import Box from "@mui/material/Box";
 import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import SimpleMde from "react-simplemde-editor";
+
 import "easymde/dist/easymde.min.css";
 import "../css/editor.css";
-
 import Breadcrumb from "../components/breadcrumbs";
 import EditorHeader from "../components/editor_header";
+import loadingState from "../store/loading_store";
 import userStore from '../store/user_store';
 import utils from "../utils/utils";
-
-import Loading from './loading';
-
 
 export const Editor = () => {
   const location = useLocation();
   const { id_token } = userStore();
-  const [isLoading, setLoading] = useState(false);
+  const { setLoading } = loadingState();
+
   const [markdownValue, setMarkdownValue] = useState("");
 
   const searchParams = new URLSearchParams(location.search);
@@ -55,8 +54,6 @@ export const Editor = () => {
 
   return (
     <>
-      <Loading loading={isLoading} />
-
       <Box display="flex" justifyContent="space-between">
         <Breadcrumb />
         <EditorHeader markdownValue={markdownValue} />

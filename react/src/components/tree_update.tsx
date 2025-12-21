@@ -11,10 +11,9 @@ import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import loadingState from "../store/loading_store";
 import userStore from '../store/user_store';
 import utils from "../utils/utils";
-
-import Loading from './loading';
 
 import type { TreeNode } from "../types/types";
 
@@ -22,7 +21,7 @@ function TreeUpdate(props: { currentNodeId: string }) {
   const navigate = useNavigate();
 
   const { id_token, tree, setTree } = userStore();
-  const [isLoading, setLoading] = useState(false);
+  const { setLoading } = loadingState();
 
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [delModalOpen, setDelModalOpen] = useState(false);
@@ -99,8 +98,6 @@ function TreeUpdate(props: { currentNodeId: string }) {
 
   return (
     <>
-      <Loading loading={isLoading} />
-
       <Container sx={{
         m: 3,
         display: "flex"

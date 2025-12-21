@@ -3,20 +3,18 @@ import SaveAltOutlinedIcon from '@mui/icons-material/SaveAltOutlined';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import "../css/editor_header.css";
-import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import loadingState from "../store/loading_store";
 import userStore from '../store/user_store';
 import utils from "../utils/utils";
-
-import Loading from './loading';
 
 function EditorHeader(props: { markdownValue: string }) {
   const markdownValue = props.markdownValue;
   const location = useLocation();
 
   const { id_token } = userStore();
-  const [isLoading, setLoading] = useState(false);
+  const { setLoading } = loadingState();
 
   const searchParams = new URLSearchParams(location.search);
   const url_node_id = searchParams.get('node_id');
@@ -42,8 +40,6 @@ function EditorHeader(props: { markdownValue: string }) {
 
   return (
     <>
-      <Loading loading={isLoading} />
-
       <Box sx={{ mb: 1, mr: 3 }}>
         <IconButton id="download" sx={{ ml: 1 }} onClick={download}>
           <SaveAltOutlinedIcon />

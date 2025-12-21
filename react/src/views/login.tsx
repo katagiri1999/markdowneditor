@@ -7,15 +7,15 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import Header from "../components/header";
-import Loading from '../components/loading';
+import loadingState from "../store/loading_store";
 import userStore from '../store/user_store';
 import utils from "../utils/utils";
 
 function Login() {
   const navigate = useNavigate();
   const { email, setEmail, password, setPassword, setIdToken } = userStore();
+  const { setLoading } = loadingState();
   const [isLoginError, setLoginError] = useState(false);
-  const [isLoading, setLoading] = useState(false);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -56,7 +56,6 @@ function Login() {
     <>
       <title>Login</title>
       <Header />
-      <Loading loading={isLoading} />
 
       <Container maxWidth="xs" sx={{ marginTop: 10 }}>
 

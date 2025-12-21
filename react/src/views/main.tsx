@@ -1,9 +1,9 @@
 import Container from "@mui/material/Container";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import Editor from "../components/editor";
 import Header from "../components/header";
-import Loading from "../components/loading";
+import loadingState from "../store/loading_store";
 import userStore from "../store/user_store";
 import utils from "../utils/utils";
 
@@ -11,7 +11,7 @@ import type { TreeNode } from "../types/types";
 
 function Main() {
   const { id_token, setTree } = userStore();
-  const [isLoading, setLoading] = useState(false);
+  const { setLoading } = loadingState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +38,6 @@ function Main() {
     <>
       <title>Main</title>
       <Header />
-      <Loading loading={isLoading} />
 
       <Container sx={{ mt: 2 }}>
         <Editor />

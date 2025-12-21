@@ -1,8 +1,10 @@
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-function Loading(props: { loading: boolean }) {
-  const loading = props.loading;
+import loadingState from '../store/loading_store';
+
+function Loading() {
+  const { loading } = loadingState();
 
   return (
     <Backdrop
