@@ -28,12 +28,12 @@ function Breadcrumb() {
 
   if (parentNodes) {
     return (
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mt: 1 }}>
+      <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ mt: 1 }}>
         {parentNodes.map((node, index) => (
           <Link
             key={node.id}
-            underline="hover"
-            color={index === parentNodes.length - 1 ? "text.primary" : "inherit"}
+            underline="none"
+            color={index === parentNodes.length - 1 ? "textDisabled" : "textSecondary"}
             href={index === parentNodes.length - 1 ? undefined : `/main?node_id=${node.id}`}
             aria-current={index === parentNodes.length - 1 ? "page" : undefined}
           >
