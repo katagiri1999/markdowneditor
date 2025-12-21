@@ -27,7 +27,7 @@
     color: #2d2d2d !important;
     text-decoration: none !important;
     font-style: normal !important;
-    background-color: white !important;
+    background-color: unset !important;
   }
 }
 
