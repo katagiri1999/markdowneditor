@@ -21,7 +21,7 @@ function Header() {
         <Typography
           variant="h6"
         >
-          Cork-Up
+          cloudjex.com
         </Typography>
 
         <Profile />
