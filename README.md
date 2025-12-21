@@ -1,4 +1,4 @@
-# Cork-Up
+# MarkdownEditor
 
 ## CICD Status
 [![CICD Workflow](https://github.com/katagiri1999/markdowneditor/actions/workflows/cicd.yaml/badge.svg)](https://github.com/katagiri1999/markdowneditor/actions/workflows/cicd.yaml)
