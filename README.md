@@ -14,12 +14,12 @@ OSS Applicationとして公開しておりますので、気軽にご利用く�
 ## System Overview
 本Repositoryでは以下のFramework/技術要素を使用しています。
 
-| Framework/技術要素 | 言語    | 用途     |
-| ------------------ | ------- | -------- |
-| FastApi            | Python  | Backend  |
-| React              | Node.js | Frontend |
-| GithubActions      | shell   | CICD     |
-| Terraform          | tf      | CICD     |
+| Framework/技術要素 | 言語       | 用途     |
+| ------------------ | ---------- | -------- |
+| FastApi            | Python     | Backend  |
+| React              | TypeScript | Frontend |
+| GithubActions      | yml        | CICD     |
+| Terraform          | tf         | CICD     |
 
 <br>
 
@@ -29,10 +29,10 @@ OSS Applicationとして公開しておりますので、気軽にご利用く�
 | -------------- | ----------------------------------- |
 | AWS Lambda     | FastApi実行環境                     |
 | AWS ApiGateway | FastApi配信                         |
+| AWS DynamoDB   | DB                                  |
 | AWS S3         | React格納/配信, Terraform State管理 |
 | AWS CloudFront | React配信                           |
-| AWS DynamoDB   | DB                                  |
-| お名前.com     | DNS                                 |
+| お名前.com     | DNS, Domain管理                     |
 
 <br>
 
