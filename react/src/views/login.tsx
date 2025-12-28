@@ -19,7 +19,7 @@ type LoginForm = {
 
 function Login() {
   const navigate = useNavigate();
-  const { setIdToken } = userStore();
+  const { setEmail, setIdToken } = userStore();
   const { setLoading } = loadingState();
 
   const [loginError, setLoginError] = useState(false);
@@ -51,7 +51,8 @@ function Login() {
       throw new Error(`login error`);
     };
 
-    const body = res.body as { id_token: string };
+    const body = res.body as { email: string, id_token: string };
+    setEmail(body.email);
     setIdToken(body.id_token);
     navigate("/main?node_id=/Nodes");
   };
