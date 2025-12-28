@@ -5,8 +5,6 @@ export default {
   get_node,
   get_parent_node_id,
   get_parent_node_ids,
-  insert_node,
-  delete_tree_node,
   is_valid_new_node,
 };
 
@@ -90,36 +88,12 @@ function get_parent_node_ids(node_id: string): string[] {
   return parentIds;
 }
 
-function insert_node(tree: TreeNode, insert_node: TreeNode): TreeNode {
-  const parent_id = get_parent_node_id(insert_node.id);
-  const parent = get_node(tree, parent_id);
-
-  if (!parent) {
-    throw new Error(`parent is null`);
-  };
-
-  parent.children = parent.children ?? [];
-  parent.children.push(insert_node);
-  return tree;
-}
-
-function delete_tree_node(tree: TreeNode, target_id: string): TreeNode {
-  const parent_id = get_parent_node_id(target_id);
-  const parent = get_node(tree, parent_id);
-  if (!parent || !parent.children) {
-    throw new Error(`can't find children: target_id=${target_id}`);
-  };
-
-  parent.children = parent.children.filter((child) => child.id !== target_id);
-  return tree;
-}
-
-function is_valid_new_node(tree: TreeNode, insert_node: TreeNode): boolean {
-  if (!insert_node.id || !insert_node.label) {
+function is_valid_new_node(tree: TreeNode, node_id: string): boolean {
+  if (!node_id) {
     return false;
   };
 
-  const parent_id = get_parent_node_id(insert_node.id);
+  const parent_id = get_parent_node_id(node_id);
   const parent = get_node(tree, parent_id);
 
   if (!parent) {
@@ -127,5 +101,5 @@ function is_valid_new_node(tree: TreeNode, insert_node: TreeNode): boolean {
   };
 
   const siblings = parent.children ?? [];
-  return !siblings.some((child) => child.label === insert_node.label);
+  return !siblings.some((child) => child.label === node_id.split("/").pop());
 }
