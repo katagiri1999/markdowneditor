@@ -1,7 +1,9 @@
+import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +22,8 @@ function Login() {
   const { setIdToken } = userStore();
   const { setLoading } = loadingState();
 
+  const [loginError, setLoginError] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -28,6 +32,7 @@ function Login() {
 
   const onSubmit = async (data: LoginForm) => {
     setLoading(true);
+    setLoginError(false);
 
     const res_promise = utils.requests(
       `${import.meta.env.VITE_API_HOST}/login`,
@@ -42,6 +47,7 @@ function Login() {
 
     if (res.status != 200) {
       setLoading(false);
+      setLoginError(true);
       throw new Error(`login error`);
     };
 
@@ -100,6 +106,12 @@ function Login() {
           >
             ログイン
           </Button>
+
+          {loginError && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              メールアドレスまたはパスワードが正しくありません
+            </Alert>
+          )}
         </form>
       </Container>
     </>
