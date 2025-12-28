@@ -3,7 +3,8 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { useState } from 'react';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import Header from "../components/header";
@@ -11,38 +12,42 @@ import loadingState from "../store/loading_store";
 import userStore from '../store/user_store';
 import utils from "../utils/utils";
 
+type LoginForm = {
+  email: string;
+  password: string;
+};
+
 function Login() {
   const navigate = useNavigate();
-
-  const { email, setEmail, password, setPassword, setIdToken } = userStore();
+  const { setIdToken } = userStore();
   const { setLoading } = loadingState();
-  const [isLoginError, setLoginError] = useState(false);
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
+  const [loginError, setLoginError] = useState(false);
 
-  const handlePwChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>();
 
-  const onClickSignin = async () => {
+  const onSubmit = async (data: LoginForm) => {
     setLoading(true);
+    setLoginError(false);
 
     const res_promise = utils.requests(
       `${import.meta.env.VITE_API_HOST}/login`,
       "POST",
       {},
       {
-        email: email,
-        password: password,
+        email: data.email,
+        password: data.password,
       }
     );
     const res = await res_promise;
 
     if (res.status != 200) {
-      setLoginError(true);
       setLoading(false);
+      setLoginError(true);
       throw new Error(`login error`);
     };
 
@@ -56,43 +61,58 @@ function Login() {
       <title>Login</title>
       <Header />
 
-      <Container maxWidth="xs" sx={{ marginTop: 10, border: '1px solid #ddd', borderRadius: '10px', padding: '30px' }}>
+      <Container
+        maxWidth="xs"
+        sx={{
+          marginTop: 10,
+          border: "1px solid #ddd",
+          borderRadius: "10px",
+          padding: "30px",
+        }}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Typography variant="h4" align="center">
+            Login
+          </Typography>
 
-        <Typography variant="h4" align="center">
-          Login
-        </Typography>
+          <TextField
+            label="メールアドレス"
+            fullWidth
+            margin="normal"
+            {...register("email", {
+              required: "メールアドレスは必須です",
+            })}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
 
-        <TextField
-          value={email}
-          onChange={handleEmailChange}
-          margin="normal"
-          fullWidth
-          label="メールアドレス"
-        />
+          <TextField
+            label="パスワード"
+            type="password"
+            fullWidth
+            margin="normal"
+            {...register("password", {
+              required: "パスワードは必須です",
+            })}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
 
-        <TextField
-          value={password}
-          onChange={handlePwChange}
-          margin="normal"
-          fullWidth
-          label="パスワード"
-          type="password"
-          autoComplete="current-password"
-        />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ marginTop: "5%" }}
+          >
+            ログイン
+          </Button>
 
-        <Button
-          onClick={onClickSignin}
-          fullWidth
-          variant="contained"
-          sx={{ marginTop: "5%" }}
-        >
-          ログイン
-        </Button>
-
-        {isLoginError &&
-          <Alert severity="error">IDまたはパスワードが正しくありません</Alert>
-        }
-
+          {loginError && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              メールアドレスまたはパスワードが正しくありません
+            </Alert>
+          )}
+        </form>
       </Container>
     </>
   );
