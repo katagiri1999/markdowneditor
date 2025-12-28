@@ -1,7 +1,7 @@
 # MarkdownEditor
 
 ## CICD Status
-[![CICD Workflow](https://github.com/katagiri1999/markdowneditor/actions/workflows/cicd.yaml/badge.svg)](https://github.com/katagiri1999/markdowneditor/actions/workflows/cicd.yaml)
+[![CICD Workflow](https://github.com/cloudjex/markdowneditor/actions/workflows/cicd.yaml/badge.svg)](https://github.com/cloudjex/markdowneditor/actions/workflows/cicd.yaml)
 
 ## Sample Application URL
 https://www.cloudjex.com
