@@ -25,19 +25,14 @@ OSS Applicationとして公開しておりますので、気軽にご利用く�
 
 本Repositoryでは以下のサービスを使用しています。以下サービスを用意し、任意の環境にDeployされることを想定しています。  
 
-| サービス       | 用途                                |
-| -------------- | ----------------------------------- |
-| AWS Lambda     | FastApi実行環境                     |
-| AWS ApiGateway | FastApi配信                         |
-| AWS DynamoDB   | DB                                  |
-| AWS S3         | React格納/配信, Terraform State管理 |
-| AWS CloudFront | React配信                           |
-| お名前.com     | DNS, Domain管理                     |
-
-<br>
-
-Architecture
-![drowio](markdowneditor.drawio.svg)
+| サービス       | 用途            |
+| -------------- | --------------- |
+| AWS Lambda     | FastApi実行環境 |
+| AWS ApiGateway | FastApi配信     |
+| AWS DynamoDB   | DB              |
+| AWS S3         | React格納/配信  |
+| AWS CloudFront | React配信       |
+| お名前.com     | DNS, Domain管理 |
 
 ## Table Design
 
