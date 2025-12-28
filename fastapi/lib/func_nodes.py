@@ -62,7 +62,7 @@ def put(params) -> dict:
         node_id = body.get("node_id")
         text: str = body.get("text")
 
-        if not node_id or not text:
+        if not node_id or text is None:
             raise Exception({
                 "status_code": 400,
                 "exception": "Bad Request",

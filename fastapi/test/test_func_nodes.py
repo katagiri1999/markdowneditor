@@ -116,6 +116,24 @@ class TestSuccessPut:
         assert response["status_code"] == 200
         assert type(response["body"]["node"]) is dict
 
+    def test_func_nodes_put_empty_text(self, id_token):
+        params = {
+            "method": "PUT",
+            "headers": {
+                "content-type": "application/json",
+                "authorization": f"Bearer {id_token}"
+            },
+            "body": {
+                "node_id": f"{PUT_NODE_ID}",
+                "text": "",
+            },
+            "query_params": {},
+        }
+        response = func_nodes.main(params)
+        logger(response)
+        assert response["status_code"] == 200
+        assert type(response["body"]["node"]) is dict
+
 
 class TestFailPut:
     def test_func_nodes_put_no_token(self):
