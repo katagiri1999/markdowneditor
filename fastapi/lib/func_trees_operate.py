@@ -59,7 +59,7 @@ def put(params) -> dict:
         dynamodbs.update_tree(email, tree)
         dynamodbs.post_node(email, node_id, "")
 
-        return tree
+        return {"tree": tree}
 
     except Exception as e:
         raise e
@@ -101,7 +101,7 @@ def delete(params) -> dict:
         for del_id in target_and_following:
             dynamodbs.delete_node(email, del_id)
 
-        return tree
+        return {"tree": tree}
 
     except Exception as e:
         raise e
