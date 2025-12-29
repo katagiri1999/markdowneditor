@@ -22,11 +22,19 @@ def main(params: dict) -> dict:
                 "error_code": "func_login.invalid_credentials",
             })
 
+        options: dict = user_info.get("options")
+        if not options.get("enabled"):
+            raise Exception({
+                "status_code": 403,
+                "exception": "Forbidden",
+                "error_code": "func_login.account_not_enabled",
+            })
+
         id_token = jwt.generate_jwt(email)
 
         res = {
             "email": email,
-            "options": user_info["options"],
+            "options": options,
             "id_token": id_token,
         }
 
