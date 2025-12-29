@@ -23,7 +23,7 @@ OSS Applicationとして公開しておりますので、気軽にご利用く�
 
 <br>
 
-本Repositoryでは以下のサービスを使用しています。以下サービスを用意し、任意の環境にDeployされることを想定しています。  
+本Repositoryでは以下のサービスを使用しています。
 
 | サービス       | 用途            |
 | -------------- | --------------- |
@@ -32,6 +32,7 @@ OSS Applicationとして公開しておりますので、気軽にご利用く�
 | AWS DynamoDB   | DB              |
 | AWS S3         | React格納/配信  |
 | AWS CloudFront | React配信       |
+| AWS SES        | メールサービス  |
 | お名前.com     | DNS, Domain管理 |
 
 ## Table Design
