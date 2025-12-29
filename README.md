@@ -38,12 +38,13 @@ OSS Applicationとして公開しておりますので、気軽にご利用く�
 ## Table Design
 
 ### users table
-| key      | type   | desctiption | description        |
-| -------- | ------ | ----------- | ------------------ |
-| email    | str    | email       | Partition Key      |
-| password | str    | hashed pw   |                    |
-| options  | object | options     |                    |
-| - otp    | str    | otp         | only inactive user |
+| key       | type   | desctiption     | description        |
+| --------- | ------ | --------------- | ------------------ |
+| email     | str    | email           | Partition Key      |
+| password  | str    | hashed pw       |                    |
+| options   | object | other settings  |                    |
+| ├ enabled | bool   | active/inactive |                    |
+| └ otp     | str    | otp             | only inactive user |
 
 ### trees table
 | key   | type   | desctiption  | description   |
