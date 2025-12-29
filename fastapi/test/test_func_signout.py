@@ -17,7 +17,6 @@ class TestSuccessPost:
         response = func_signout.main(params)
         logger(response)
         assert response["status_code"] == 200
-
         body: dict = response["body"]
         assert body.get("result") == "success"
 

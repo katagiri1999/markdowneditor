@@ -19,7 +19,11 @@ class TestSuccessGET:
         response = func_nodes.main(params)
         logger(response)
         assert response["status_code"] == 200
-        assert type(response["body"]["nodes"]) is list
+        nodes = response["body"]["nodes"]
+        assert type(nodes) is list
+        assert "email" in nodes[0]
+        assert "id" in nodes[0]
+        assert "text" in nodes[0]
 
     def test_func_nodes_get_normal_with_params(self, id_token):
         params = {
@@ -34,7 +38,11 @@ class TestSuccessGET:
         response = func_nodes.main(params)
         logger(response)
         assert response["status_code"] == 200
-        assert type(response["body"]["node"]) is dict
+        node = response["body"]["node"]
+        assert type(node) is dict
+        assert "email" in node
+        assert "id" in node
+        assert "text" in node
 
 
 class TestFailGet:
@@ -108,7 +116,7 @@ class TestSuccessPut:
             ## Sample Application URL
             https://www.cloudjex.com
         """
-        text = textwrap.dedent(text)
+        text = textwrap.dedent(text).strip("\n")
 
         params = {
             "method": "PUT",
@@ -125,7 +133,11 @@ class TestSuccessPut:
         response = func_nodes.main(params)
         logger(response)
         assert response["status_code"] == 200
-        assert response["body"]["node"]["text"] == text
+        node = response["body"]["node"]
+        assert type(node) is dict
+        assert node["text"] == text
+        assert "email" in node
+        assert "node_id" in node
 
     def test_func_nodes_put_empty_text(self, id_token):
         # First, get the current text
@@ -158,7 +170,11 @@ class TestSuccessPut:
         response = func_nodes.main(params)
         logger(response)
         assert response["status_code"] == 200
-        assert response["body"]["node"]["text"] == ""
+        node = response["body"]["node"]
+        assert type(node) is dict
+        assert node["text"] == ""
+        assert "email" in node
+        assert "node_id" in node
 
         # Restore previous text
         params = {

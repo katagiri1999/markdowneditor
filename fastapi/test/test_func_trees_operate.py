@@ -5,19 +5,29 @@ from .conftest import logger
 
 class TestSuccessPut:
     def test_func_trees_operate_put_normal(self, id_token):
+        new_node_id = "/Nodes/test_new_node"
         params = {
             "method": "PUT",
             "headers": {
                 "content-type": "application/json",
                 "authorization": f"Bearer {id_token}"
             },
-            "body": {"node_id": "/Nodes/test_new_node"},
+            "body": {"node_id": new_node_id},
             "query_params": {},
         }
         response = func_trees_operate.main(params)
         logger(response)
         assert response["status_code"] == 200
-        assert type(response["body"]) is dict
+        tree = response["body"]["tree"]
+        children = tree["children"]
+        new_node = None
+        for child in children:
+            if child["id"] == new_node_id:
+                new_node = child
+        assert new_node is not None
+        assert "id" in new_node
+        assert "label" in new_node
+        assert "children" in new_node
 
 
 class TestFailPut:
@@ -108,6 +118,7 @@ class TestFailPut:
 
 class TestSuccessDelete:
     def test_func_trees_operate_delete_normal(self, id_token):
+        new_node_id = "/Nodes/test_new_node"
         params = {
             "method": "DELETE",
             "headers": {
@@ -115,12 +126,18 @@ class TestSuccessDelete:
                 "authorization": f"Bearer {id_token}"
             },
             "body": {},
-            "query_params": {"node_id": "/Nodes/test_new_node"},
+            "query_params": {"node_id": new_node_id},
         }
         response = func_trees_operate.main(params)
         logger(response)
         assert response["status_code"] == 200
-        assert type(response["body"]) is dict
+        tree = response["body"]["tree"]
+        children = tree["children"]
+        new_node = None
+        for child in children:
+            if child["id"] == new_node_id:
+                new_node = child
+        assert new_node is None
 
 
 class TestFailDelete:

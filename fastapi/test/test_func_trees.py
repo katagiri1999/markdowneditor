@@ -17,7 +17,10 @@ class TestSuccessGET:
         response = func_trees.main(params)
         logger(response)
         assert response["status_code"] == 200
-        assert response["body"].get("tree") is not None
+        tree = response["body"]["tree"]
+        assert "id" in tree
+        assert "label" in tree
+        assert "children" in tree
 
 
 class TestFailGet:

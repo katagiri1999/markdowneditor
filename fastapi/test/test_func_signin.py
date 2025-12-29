@@ -5,13 +5,14 @@ from .conftest import logger
 
 class TestSuccessPost:
     def test_func_signin_normal(self):
+        email = "test@gmail.com"
         params = {
             "method": "POST",
             "headers": {
                 "content-type": "application/json"
             },
             "body": {
-                "email": "test@gmail.com",
+                "email": email,
                 "password": "test"
             },
             "query_params": {},
@@ -19,10 +20,11 @@ class TestSuccessPost:
         response = func_signin.main(params)
         logger(response)
         assert response["status_code"] == 200
-
         body: dict = response["body"]
         assert body.get("id_token") != None
-        assert body.get("email") != None
+        assert body.get("email") == email
+        assert type(body["options"]) is dict
+        assert body["options"].get("enabled") == True
 
 
 class TestFailPost:
