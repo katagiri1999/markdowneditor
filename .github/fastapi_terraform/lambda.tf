@@ -37,6 +37,13 @@ resource "aws_lambda_function" "fastapi_lambda" {
   filename         = "${path.module}/../build/deploy.zip"
   source_code_hash = filebase64sha256("${path.module}/../build/deploy.zip")
   timeout          = 30
+
+  environment {
+    variables = {
+      JWT_KEY = "${var.CLOUDJEX_JWT_KEY}"
+    }
+  }
+
   tags = {
     Name = "${var.project_name}"
   }
