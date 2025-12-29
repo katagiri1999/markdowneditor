@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import { Box } from "@mui/material";
 import { useState, useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import SimpleMde from "react-simplemde-editor";

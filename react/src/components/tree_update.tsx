@@ -1,13 +1,8 @@
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
-import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
+import {
+  Alert, Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, TextField
+} from "@mui/material";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

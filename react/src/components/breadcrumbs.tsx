@@ -1,5 +1,4 @@
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
+import { Breadcrumbs, Link } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 
 import userStore from '../store/user_store';

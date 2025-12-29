@@ -1,8 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import { Container, Drawer, IconButton, Tooltip } from '@mui/material';
 import { useState } from 'react';
 
 import Explorer from './explorer';

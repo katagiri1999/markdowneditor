@@ -1,8 +1,7 @@
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import Box from "@mui/material/Box";
-import Typography from '@mui/material/Typography';
+import { Box, Typography } from "@mui/material";
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import { useState } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";

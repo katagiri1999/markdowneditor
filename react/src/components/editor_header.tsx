@@ -1,7 +1,6 @@
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import SaveAltOutlinedIcon from '@mui/icons-material/SaveAltOutlined';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
+import { Box, IconButton } from '@mui/material';
 import "../css/editor_header.css";
 import fileDownload from 'js-file-download';
 import { useLocation } from 'react-router-dom';
