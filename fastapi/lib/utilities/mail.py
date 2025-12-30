@@ -44,7 +44,7 @@ def send_mail(recipient: str, subject: str, body: str) -> None:
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
-    msg["From"] = "cloudjex.com"
+    msg["From"] = "cloudjex.com<noreply@cloudjex.com>"
     msg["To"] = recipient
 
     text_part = MIMEText(body, "plain", "utf-8")
@@ -55,4 +55,4 @@ def send_mail(recipient: str, subject: str, body: str) -> None:
     with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
         server.starttls()
         server.login(SMTP_USER, SMTP_PASS)
-        server.sendmail(SMTP_USER, recipient, msg.as_string())
+        server.sendmail("cloudjex.com<noreply@cloudjex.com>", recipient, msg.as_string())
