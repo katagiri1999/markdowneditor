@@ -31,16 +31,20 @@ HTML = """
 
 
 def send_mail(recipient: str, subject: str, body: str) -> None:
-    SMTP_HOST = "smtp.gmail.com"
-    SMTP_PORT = 587
-    SMTP_USER = "cloudjex.com@gmail.com"
+    SMTP_HOST = config.SMTP_HOST
+    SMTP_PORT = config.SMTP_PORT
+    SMTP_USER = config.SMTP_USER
     SMTP_PASS = config.SMTP_PASSWORD
+
+    if not (SMTP_USER and SMTP_PASS and SMTP_HOST and SMTP_PORT):
+        print(f"Warning: SMTP is not configured. Cannot send email to {recipient}.")
+        return
 
     html = HTML.format(title=subject, body=body)
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
-    msg["From"] = SMTP_USER
+    msg["From"] = "cloudjex.com"
     msg["To"] = recipient
 
     text_part = MIMEText(body, "plain", "utf-8")
