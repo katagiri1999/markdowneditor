@@ -1,6 +1,8 @@
 import random
 
-from lib.utilities import dynamodbs, hash, mail, response
+from lib import config
+from lib.utilities import hash, mail, response
+from lib.utilities.dynamodbs import DynamoDBClient
 
 
 def main(params: dict) -> dict:
@@ -16,7 +18,8 @@ def main(params: dict) -> dict:
                 "error_code": "func_signup.missing_parameters",
             })
 
-        user = dynamodbs.get_user(email)
+        db_client = DynamoDBClient(config.USER_TABLE_NAME)
+        user = db_client.get_user(email)
         if user and user["options"]["enabled"]:
             raise Exception({
                 "status_code": 409,
@@ -32,7 +35,7 @@ def main(params: dict) -> dict:
             "enabled": False,
         }
 
-        dynamodbs.put_user(email, hashed_password, options)
+        db_client.put_user(email, hashed_password, options)
         mail.send_mail(
             email,
             "ユーザ仮登録完了のお知らせ",

@@ -1,4 +1,6 @@
-from lib.utilities import dynamodbs, jwt, response
+from lib import config
+from lib.utilities import jwt, response
+from lib.utilities.dynamodbs import DynamoDBClient
 
 
 def main(params: dict) -> dict:
@@ -14,7 +16,8 @@ def main(params: dict) -> dict:
                 "error_code": "func_signup_verify.missing_parameters",
             })
 
-        user = dynamodbs.get_user(email)
+        db_client = DynamoDBClient(config.USER_TABLE_NAME)
+        user = db_client.get_user(email)
         if not user:
             raise Exception({
                 "status_code": 404,
@@ -33,7 +36,7 @@ def main(params: dict) -> dict:
         options.pop("otp")
         options["enabled"] = True
 
-        dynamodbs.put_user(email, user["password"], options)
+        db_client.put_user(email, user["password"], options)
 
         id_token = jwt.generate_jwt(email)
 

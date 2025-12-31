@@ -1,4 +1,6 @@
-from lib.utilities import dynamodbs, hash, jwt, response
+from lib import config
+from lib.utilities import hash, jwt, response
+from lib.utilities.dynamodbs import DynamoDBClient
 
 
 def main(params: dict) -> dict:
@@ -14,7 +16,8 @@ def main(params: dict) -> dict:
                 "error_code": "func_login.missing_parameters",
             })
 
-        user_info = dynamodbs.get_user(email=email)
+        db_client = DynamoDBClient(config.USER_TABLE_NAME)
+        user_info = db_client.get_user(email=email)
         if not user_info or not hash.verify_password(pw, user_info.get("password")):
             raise Exception({
                 "status_code": 401,

@@ -1,4 +1,6 @@
-from lib.utilities import dynamodbs, jwt, response
+from lib import config
+from lib.utilities import jwt, response
+from lib.utilities.dynamodbs import DynamoDBClient
 
 
 def main(params: dict) -> dict:
@@ -23,7 +25,8 @@ def get(params) -> dict:
     try:
         email: str = params["email"]
 
-        tree_info = dynamodbs.get_tree(email=email)
+        db_client = DynamoDBClient(config.TREE_TABLE_NAME)
+        tree_info = db_client.get_tree(email=email)
         if not tree_info:
             raise Exception({
                 "status_code": 404,

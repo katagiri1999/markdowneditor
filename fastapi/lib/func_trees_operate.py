@@ -1,4 +1,6 @@
-from lib.utilities import dynamodbs, jwt, response, trees
+from lib import config
+from lib.utilities import jwt, response, trees
+from lib.utilities.dynamodbs import DynamoDBClient
 
 
 def main(params: dict) -> dict:
@@ -64,8 +66,11 @@ def put(params) -> dict:
         parent_node["children"] = children
         tree = trees.sort_tree(tree)
 
-        dynamodbs.put_tree(email, tree)
-        dynamodbs.put_node(email, node_id, "")
+        db_client_tree = DynamoDBClient(config.TREE_TABLE_NAME)
+        db_client_node = DynamoDBClient(config.NODES_TABLE_NAME)
+
+        db_client_tree.put_tree(email, tree)
+        db_client_node.put_node(email, node_id, "")
 
         return {"tree": tree}
 
@@ -105,9 +110,12 @@ def delete(params) -> dict:
 
         tree = trees.sort_tree(tree)
 
-        dynamodbs.put_tree(email, tree)
+        db_client_tree = DynamoDBClient(config.TREE_TABLE_NAME)
+        db_client_node = DynamoDBClient(config.NODES_TABLE_NAME)
+
+        db_client_tree.put_tree(email, tree)
         for del_id in target_and_following:
-            dynamodbs.delete_node(email, del_id)
+            db_client_node.delete_node(email, del_id)
 
         return {"tree": tree}
 
@@ -116,7 +124,8 @@ def delete(params) -> dict:
 
 
 def get_tree(email: str) -> dict:
-    tree_info = dynamodbs.get_tree(email)
+    db_client = DynamoDBClient(config.TREE_TABLE_NAME)
+    tree_info = db_client.get_tree(email)
     if not tree_info:
         raise Exception({
             "status_code": 404,

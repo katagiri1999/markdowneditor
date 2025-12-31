@@ -1,4 +1,6 @@
-from lib.utilities import dynamodbs, jwt, response
+from lib import config
+from lib.utilities import jwt, response
+from lib.utilities.dynamodbs import DynamoDBClient
 
 
 def main(params: dict) -> dict:
@@ -26,8 +28,9 @@ def get(params) -> dict:
         query_params: dict = params["query_params"]
         node_id: str = query_params.get("node_id")
 
+        db_client = DynamoDBClient(config.NODES_TABLE_NAME)
         if node_id:
-            item = dynamodbs.get_node(email, node_id)
+            item = db_client.get_node(email, node_id)
             if not item:
                 raise Exception({
                     "status_code": 404,
@@ -37,7 +40,7 @@ def get(params) -> dict:
             ret = {"node": item}
 
         else:
-            items = dynamodbs.get_nodes(email)
+            items = db_client.get_nodes(email)
             if not items:
                 raise Exception({
                     "status_code": 404,
@@ -67,7 +70,8 @@ def put(params) -> dict:
                 "error_code": "func_nodes.missing_parameters",
             })
 
-        node = dynamodbs.get_node(email, node_id)
+        db_client = DynamoDBClient(config.NODES_TABLE_NAME)
+        node = db_client.get_node(email, node_id)
         if not node:
             raise Exception({
                 "status_code": 404,
@@ -75,7 +79,7 @@ def put(params) -> dict:
                 "error_code": "func_nodes.not_found",
             })
 
-        dynamodbs.put_node(email, node_id, text)
+        db_client.put_node(email, node_id, text)
 
         return {
             "node": {
