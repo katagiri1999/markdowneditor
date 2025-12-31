@@ -1,4 +1,3 @@
-from lib import config
 from lib.utilities.dynamodb_client import UserTableClient
 from lib.utilities.jwt_client import JwtClient
 from lib.utilities.response_handler import ResponseHandler

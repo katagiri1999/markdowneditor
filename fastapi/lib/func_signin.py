@@ -1,4 +1,3 @@
-from lib import config
 from lib.utilities.bcrypt_hash import BcryptHash
 from lib.utilities.dynamodb_client import UserTableClient
 from lib.utilities.jwt_client import JwtClient
