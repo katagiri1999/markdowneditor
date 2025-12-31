@@ -1,6 +1,7 @@
 from lib import config
-from lib.utilities import jwt, response
-from lib.utilities.dynamodbs import DynamoDBClient
+from lib.utilities import response
+from lib.utilities.dynamodb_client import DynamoDBClient
+from lib.utilities.jwt_client import JwtClient
 
 
 def main(params: dict) -> dict:
@@ -38,7 +39,7 @@ def main(params: dict) -> dict:
 
         db_client.put_user(email, user["password"], options)
 
-        id_token = jwt.generate_jwt(email)
+        id_token = JwtClient().generate_jwt(email)
 
         res = {
             "email": email,

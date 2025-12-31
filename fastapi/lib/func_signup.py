@@ -1,8 +1,9 @@
 import random
 
 from lib import config
-from lib.utilities import hash, mail, response
-from lib.utilities.dynamodbs import DynamoDBClient
+from lib.utilities import mail, response
+from lib.utilities.bcrypt_hash import BcryptHash
+from lib.utilities.dynamodb_client import DynamoDBClient
 
 
 def main(params: dict) -> dict:
@@ -27,7 +28,8 @@ def main(params: dict) -> dict:
                 "error_code": "func_signup.user_already_exists",
             })
 
-        hashed_password = hash.hash_password(password)
+        bcrypt = BcryptHash()
+        hashed_password = bcrypt.bcrypt_hash(password)
 
         otp = f"{random.randint(0, 999999):06d}"
         options = {

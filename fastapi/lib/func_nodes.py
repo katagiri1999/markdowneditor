@@ -1,6 +1,7 @@
 from lib import config
-from lib.utilities import jwt, response
-from lib.utilities.dynamodbs import DynamoDBClient
+from lib.utilities import response
+from lib.utilities.dynamodb_client import DynamoDBClient
+from lib.utilities.jwt_client import JwtClient
 
 
 def main(params: dict) -> dict:
@@ -8,7 +9,7 @@ def main(params: dict) -> dict:
         headers: dict = params["headers"]
         id_token: str = headers.get("authorization")
 
-        decoded = jwt.verify_id_token(id_token)
+        decoded = JwtClient().verify_id_token(id_token)
         params.update({"email": decoded["email"]})
 
         method: str = params["method"]

@@ -1,6 +1,8 @@
 from lib import config
-from lib.utilities import hash, jwt, response
-from lib.utilities.dynamodbs import DynamoDBClient
+from lib.utilities import response
+from lib.utilities.bcrypt_hash import BcryptHash
+from lib.utilities.dynamodb_client import DynamoDBClient
+from lib.utilities.jwt_client import JwtClient
 
 
 def main(params: dict) -> dict:
@@ -18,7 +20,9 @@ def main(params: dict) -> dict:
 
         db_client = DynamoDBClient(config.USER_TABLE_NAME)
         user_info = db_client.get_user(email=email)
-        if not user_info or not hash.verify_password(pw, user_info.get("password")):
+
+        bcrypt = BcryptHash()
+        if not user_info or not bcrypt.bcrypt_verify(pw, user_info.get("password")):
             raise Exception({
                 "status_code": 401,
                 "exception": "Unauthorized",
@@ -33,7 +37,7 @@ def main(params: dict) -> dict:
                 "error_code": "func_login.account_not_enabled",
             })
 
-        id_token = jwt.generate_jwt(email)
+        id_token = JwtClient().generate_jwt(email)
 
         res = {
             "email": email,
