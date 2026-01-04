@@ -4,15 +4,14 @@
 [![CICD Workflow](https://github.com/cloudjex/markdowneditor/actions/workflows/cicd.yaml/badge.svg)](https://github.com/cloudjex/markdowneditor/actions/workflows/cicd.yaml)
 
 ## Summary
-markdown管理アプリ用のPublicRepositoryです。  
-Serverless Architectureを使用した、シンプルなFrontend/Backend構成となります。  
-Serverlessを採用することで、非常に安価に構築/運用しています。  
-OSS Applicationとして公開しておりますので、気軽にご利用ください。
+markdown管理アプリ用のPublicRepository。  
+Serverless Architectureを使用した、シンプルなFrontend/Backend構成。  
+Serverlessを採用し、安価に構築/運用。OSS Applicationとして公開中。
 
 App: [cloudjex.com](https://www.cloudjex.com)
 
 ## System Overview
-本Repositoryでは以下のFramework/技術要素を使用しています。
+以下のFramework/技術要素を使用
 
 | Framework/技術要素 | 言語       | 用途     |
 | ------------------ | ---------- | -------- |
@@ -23,7 +22,7 @@ App: [cloudjex.com](https://www.cloudjex.com)
 
 <br>
 
-本Repositoryでは以下のサービスを使用しています。
+以下のサービスを使用
 
 | サービス       | 用途               |
 | -------------- | ------------------ |
@@ -37,24 +36,31 @@ App: [cloudjex.com](https://www.cloudjex.com)
 
 ## Table Design
 
-### users table
-| key       | type   | desctiption     | description        |
-| --------- | ------ | --------------- | ------------------ |
-| email     | str    | email           | Partition Key      |
-| password  | str    | hashed pw       |                    |
-| options   | object | other settings  |                    |
-| ├ enabled | bool   | active/inactive |                    |
-| └ otp     | str    | otp             | only inactive user |
+NoSQL(ドキュメント指向DB)を使用し、Itemは単一テーブルに格納  
 
-### trees table
-| key   | type   | desctiption  | description   |
-| ----- | ------ | ------------ | ------------- |
-| email | str    | email        | Partition Key |
-| tree  | object | tree content |               |
+主キー: `PK`  
+ソートキー: `SK`
 
-### nodes table
-| key   | type | desctiption | description   |
-| ----- | ---- | ----------- | ------------- |
-| email | str  | email       | Partition Key |
-| id    | str  | node id     | Sort Key      |
-| text  | str  | text        |               |
+### user item
+| key       | type   | desctiption            | description        |
+| --------- | ------ | ---------------------- | ------------------ |
+| PK        | str    | value: `EMAIL#{email}` | PartitionKey       |
+| SK        | str    | value: `PROFILE`       | SortKey            |
+| password  | str    | hashed pw              |                    |
+| options   | object | other settings         |                    |
+| ├ enabled | bool   | active/inactive        |                    |
+| └ otp     | str    | otp                    | only inactive user |
+
+### tree item
+| key  | type   | desctiption            | description  |
+| ---- | ------ | ---------------------- | ------------ |
+| PK   | str    | value: `EMAIL#{email}` | PartitionKey |
+| SK   | str    | value: `TREE`          | SortKey      |
+| tree | object | tree content           |              |
+
+### node item
+| key  | type | desctiption             | description  |
+| ---- | ---- | ----------------------- | ------------ |
+| PK   | str  | value: `EMAIL#{email}`  | PartitionKey |
+| SK   | str  | value: `NODE#{node id}` | SortKey      |
+| text | str  | text                    |              |
