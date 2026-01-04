@@ -44,6 +44,6 @@ export interface SignupForm {
   password_confirm: string;
 };
 
-export interface Otp {
+export interface OtpForm {
   otp: string;
 };
