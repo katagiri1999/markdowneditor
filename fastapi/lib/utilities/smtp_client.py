@@ -36,7 +36,7 @@ class SmtpClient:
         self.smtp_port = config.SMTP_PORT
         self.smtp_user = config.SMTP_USER
         self.smtp_pass = config.SMTP_PASSWORD
-        self.smtp_from = "cloudjex.com<noreply@cloudjex.com>"
+        self.smtp_from = "cloudjex.com<auto@cloudjex.com>"
 
     def send_mail(self, recipient: str, subject: str, body: str) -> None:
         if not (
