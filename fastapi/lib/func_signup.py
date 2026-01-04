@@ -1,4 +1,4 @@
-import random
+import secrets
 
 from lib.utilities import errors
 from lib.utilities.bcrypt_hash import BcryptHash
@@ -24,7 +24,7 @@ def main(params: dict) -> dict:
         bcrypt = BcryptHash()
         hashed_password = bcrypt.bcrypt_hash(password)
 
-        otp = f"{random.randint(0, 999999):06d}"
+        otp = f"{secrets.randbelow(1000000):06d}"
         options = {
             "otp": otp,
             "enabled": False,
