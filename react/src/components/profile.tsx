@@ -15,7 +15,7 @@ function Profile() {
   const { setLoading, resetLoadingState } = loadingState();
 
   const [isMenuOpen, setIsMenuOpen] = useState<null | HTMLElement>(null);
-  const [isOpenLogoutDialog, setOpenLogoutDialog] = useState<boolean>(false);
+  const [isOpenSignoutDialog, setOpenSignoutDialog] = useState<boolean>(false);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setIsMenuOpen(event.currentTarget);
@@ -30,13 +30,13 @@ function Profile() {
     handleMenuClose();
   };
 
-  const openLogout = () => {
-    setOpenLogoutDialog(true);
+  const openSignout = () => {
+    setOpenSignoutDialog(true);
     handleMenuClose();
   };
 
-  const logoutClick = async () => {
-    setOpenLogoutDialog(false);
+  const signoutClick = async () => {
+    setOpenSignoutDialog(false);
     setLoading(true);
 
     await request_utils.requests(
@@ -60,7 +60,7 @@ function Profile() {
           onClick={handleMenuOpen}
           sx={{ position: "absolute", right: 10 }}
         >
-          <Tooltip title={`${email} でログイン中`}>
+          <Tooltip title={`Sign In: ${email}`}>
             <Avatar>{email.charAt(0).toUpperCase()}</Avatar>
           </Tooltip>
         </IconButton>
@@ -83,20 +83,20 @@ function Profile() {
           <MenuItem onClick={() => clickInformation("https://github.com/cloudjex/markdowneditor")}>
             Github
           </MenuItem>
-          <MenuItem onClick={openLogout}>
-            ログアウト
+          <MenuItem onClick={openSignout}>
+            Sign Out
           </MenuItem>
         </Menu>
 
         <Dialog
-          open={isOpenLogoutDialog}
-          onClose={() => setOpenLogoutDialog(false)}
+          open={isOpenSignoutDialog}
+          onClose={() => setOpenSignoutDialog(false)}
         >
           <DialogTitle>
-            <b>{email}</b> からログアウトしますか？
+            <b>{email}</b> からSign Outしますか？
           </DialogTitle>
           <DialogActions>
-            <Button onClick={logoutClick}>はい</Button>
+            <Button onClick={signoutClick}>はい</Button>
           </DialogActions>
         </Dialog>
       </>
