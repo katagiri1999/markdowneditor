@@ -68,6 +68,9 @@ def delete(params) -> dict:
     if not node_id:
         raise errors.BadRequestError("func_trees_operate.missing_params")
 
+    if node_id == "/Nodes":
+        raise errors.ForbiddenError("func_trees_operate.cant_delete")
+
     db_client = DynamoDBClient()
 
     tree_info = db_client.get_tree(email)

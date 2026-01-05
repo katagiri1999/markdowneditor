@@ -197,6 +197,20 @@ class TestFailDelete:
         logger(response)
         assert response["status_code"] == 400
 
+    def test_func_trees_operate_delete_root(self, id_token):
+        params = {
+            "method": "DELETE",
+            "headers": {
+                "content-type": "application/json",
+                "authorization": f"Bearer {id_token}"
+            },
+            "body": {},
+            "query_params": {"node_id": "/Nodes"},
+        }
+        response = func_trees_operate.main(params)
+        logger(response)
+        assert response["status_code"] == 403
+
     def test_func_trees_operate_delete_non_exist1(self, id_token):
         params = {
             "method": "DELETE",
