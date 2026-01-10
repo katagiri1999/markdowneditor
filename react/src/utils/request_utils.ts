@@ -14,9 +14,8 @@ async function requests<T = unknown>(
     headers["Content-Type"] = "application/json";
   }
 
-  console.group("API Request");
-  console.log(`[${method}]: ${url}`);
-  console.log({ url, method, headers, params });
+  console.group("API Request", `[${method}]: ${url}`);
+  console.log("Headers", headers);
 
   let detail;
   if (method === "GET" || method === "DELETE") {
@@ -25,12 +24,14 @@ async function requests<T = unknown>(
       headers,
     };
     url = `${url}?${new URLSearchParams(params as Record<string, string>)}`;
+    console.log("Params", params);
   } else {
     detail = {
       method,
       headers,
       body: JSON.stringify(params),
     };
+    console.log("Body", params);
   }
 
   const res = await fetch(url, detail);
@@ -40,7 +41,7 @@ async function requests<T = unknown>(
     body: await res.json(),
   };
 
-  console.log(result);
+  console.log("Response", result);
   console.groupEnd();
   return result;
 };
