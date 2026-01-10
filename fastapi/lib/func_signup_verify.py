@@ -1,3 +1,5 @@
+from lib.entities.node import Node
+from lib.entities.tree import Tree
 from lib.utilities import errors
 from lib.utilities.dynamodb_client import DynamoDBClient
 from lib.utilities.response_handler import ResponseHandler
@@ -29,11 +31,14 @@ def main(params: dict) -> dict:
             "label": "Nodes",
             "children": [],
         }
-        initial_node_id = "/Nodes"
+        initial_tree = Tree(user.email, initial_tree)
 
-        db_client.put_user(email, user.password, user.options.json)
-        db_client.put_tree(email, initial_tree)
-        db_client.put_node(email, initial_node_id, "")
+        initial_node_id = "/Nodes"
+        initial_node = Node(user.email, initial_node_id, "")
+
+        db_client.put_user(user)
+        db_client.put_tree(initial_tree)
+        db_client.put_node(initial_node)
 
         res = {
             "result": "success"

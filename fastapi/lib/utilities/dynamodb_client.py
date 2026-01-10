@@ -3,7 +3,9 @@ from boto3.dynamodb.conditions import Key
 from mypy_boto3_dynamodb.service_resource import Table
 
 from lib import config
-from lib.entities import node, tree, user
+from lib.entities.node import Node
+from lib.entities.tree import Tree
+from lib.entities.user import User
 
 
 class DynamoDBClient:
@@ -13,7 +15,7 @@ class DynamoDBClient:
     ###############################
     # For User
     ###############################
-    def get_user(self, email: str) -> user.User | None:
+    def get_user(self, email: str) -> User | None:
         response = self._db_client.get_item(
             Key={
                 "PK": f"EMAIL#{email}",
@@ -26,23 +28,23 @@ class DynamoDBClient:
 
         else:
             _email = item.pop("PK").replace("EMAIL#", "")
-            entity = user.User(_email, item["password"], item["options"])
+            entity = User(_email, item["password"], item["options"])
             return entity
 
-    def put_user(self, email: str, password: str, options: dict) -> None:
+    def put_user(self, user: User) -> None:
         self._db_client.put_item(
             Item={
-                "PK": f"EMAIL#{email}",
+                "PK": f"EMAIL#{user.email}",
                 "SK": "PROFILE",
-                "password": password,
-                "options": options,
+                "password": user.password,
+                "options": user.options.json,
             }
         )
 
     ###############################
     # For Tree
     ###############################
-    def get_tree(self, email: str) -> tree.Tree | None:
+    def get_tree(self, email: str) -> Tree | None:
         response = self._db_client.get_item(
             Key={
                 "PK": f"EMAIL#{email}",
@@ -55,22 +57,22 @@ class DynamoDBClient:
 
         else:
             _email = item.pop("PK").replace("EMAIL#", "")
-            entity = tree.Tree(_email, item["tree"])
+            entity = Tree(_email, item["tree"])
             return entity
 
-    def put_tree(self, email: str, tree: dict) -> None:
+    def put_tree(self, tree: Tree) -> None:
         self._db_client.put_item(
             Item={
-                "PK": f"EMAIL#{email}",
+                "PK": f"EMAIL#{tree.email}",
                 "SK": "TREE",
-                "tree": tree,
+                "tree": tree.tree.json,
             }
         )
 
     ###############################
     # For Node
     ###############################
-    def get_node(self, email: str, node_id) -> tree.Tree | None:
+    def get_node(self, email: str, node_id) -> Node | None:
         response = self._db_client.get_item(
             Key={
                 "PK": f"EMAIL#{email}",
@@ -84,10 +86,10 @@ class DynamoDBClient:
         else:
             _email = item.pop("PK").replace("EMAIL#", "")
             _node_id = item.pop("SK").replace("NODE#", "")
-            entity = node.Node(_email, _node_id, item["text"])
+            entity = Node(_email, _node_id, item["text"])
             return entity
 
-    def get_nodes(self, email: str) -> list[node.Node] | list:
+    def get_nodes(self, email: str) -> list[Node] | list:
         response = self._db_client.query(
             KeyConditionExpression=(
                 Key("PK").eq(f"EMAIL#{email}") &
@@ -103,23 +105,23 @@ class DynamoDBClient:
             for item in items:
                 _email = item.pop("PK").replace("EMAIL#", "")
                 _node_id = item.pop("SK").replace("NODE#", "")
-                entity = node.Node(_email, _node_id, item["text"])
+                entity = Node(_email, _node_id, item["text"])
                 entities.append(entity)
             return entities
 
-    def put_node(self, email: str, node_id: str, text: str) -> None:
+    def put_node(self, node: Node) -> None:
         self._db_client.put_item(
             Item={
-                "PK": f"EMAIL#{email}",
-                "SK": f"NODE#{node_id}",
-                "text": text,
+                "PK": f"EMAIL#{node.email}",
+                "SK": f"NODE#{node.id}",
+                "text": node.text,
             }
         )
 
-    def delete_node(self, email: str, node_id: str) -> None:
+    def delete_node(self, node: Node) -> None:
         self._db_client.delete_item(
             Key={
-                "PK": f"EMAIL#{email}",
-                "SK": f"NODE#{node_id}",
+                "PK": f"EMAIL#{node.email}",
+                "SK": f"NODE#{node.id}",
             }
         )

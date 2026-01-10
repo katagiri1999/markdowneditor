@@ -1,5 +1,6 @@
 import secrets
 
+from lib.entities.user import User
 from lib.utilities import errors
 from lib.utilities.bcrypt_hash import BcryptHash
 from lib.utilities.dynamodb_client import DynamoDBClient
@@ -22,22 +23,22 @@ def main(params: dict) -> dict:
             raise errors.ConflictError("func_signup.conflict_user")
 
         bcrypt = BcryptHash()
-        hashed_password = bcrypt.bcrypt_hash(password)
-
-        otp = f"{secrets.randbelow(1000000):06d}"
+        password = bcrypt.bcrypt_hash(password)
         options = {
-            "otp": otp,
+            "otp": f"{secrets.randbelow(1000000):06d}",
             "enabled": False,
         }
 
-        db_client.put_user(email, hashed_password, options)
+        new_user = User(email, password, options)
+
+        db_client.put_user(new_user)
         SmtpClient().send_mail(
             email,
             "ユーザ仮登録完了のお知らせ",
-            f"ユーザ仮登録が完了しました。認証画面で以下の認証コードを入力してください。<br><br>認証コード: {otp}"
+            f"ユーザ仮登録が完了しました。認証画面で以下の認証コードを入力してください。<br><br>認証コード: {new_user.options.otp}"
         )
 
-        res = {"email": email}
+        res = {"email": new_user.email}
         return ResponseHandler().response(body=res, status_code=200)
 
     except Exception as e:

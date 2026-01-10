@@ -1,3 +1,4 @@
+from lib.entities.node import Node
 from lib.utilities import errors
 from lib.utilities.dynamodb_client import DynamoDBClient
 from lib.utilities.jwt_client import JwtClient
@@ -61,12 +62,13 @@ def put(params) -> dict:
     if not node:
         raise errors.NotFoundError("func_nodes.not_found")
 
-    db_client.put_node(email, node_id, text)
+    node.text = text
+    db_client.put_node(node)
 
     return {
         "node": {
-            "email": email,
-            "node_id": node_id,
-            "text": text,
+            "email": node.email,
+            "node_id": node.id,
+            "text": node.text,
         }
     }

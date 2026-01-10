@@ -1,3 +1,4 @@
+from lib.entities.node import Node
 from lib.utilities import errors
 from lib.utilities.dynamodb_client import DynamoDBClient
 from lib.utilities.jwt_client import JwtClient
@@ -37,12 +38,6 @@ def put(params) -> dict:
     if not label:
         raise errors.BadRequestError("func_trees_operate.invalid_params")
 
-    new_node = {
-        "id": node_id,
-        "label": label,
-        "children": [],
-    }
-
     db_client = DynamoDBClient()
 
     tree = db_client.get_tree(email)
@@ -50,12 +45,19 @@ def put(params) -> dict:
         raise errors.NotFoundError("func_trees_operate.not_found")
 
     tree_handler = TreeHandler(tree.tree.json)
-
+    new_node = {
+        "id": node_id,
+        "label": label,
+        "children": [],
+    }
     tree_handler.insert_node(new_node)
     new_tree = tree_handler.sort_tree()
+    tree.tree = new_tree
 
-    db_client.put_tree(email, new_tree)
-    db_client.put_node(email, node_id, "")
+    new_node = Node(email, node_id, "")
+
+    db_client.put_tree(tree)
+    db_client.put_node(new_node)
     return {"tree": new_tree}
 
 
@@ -81,11 +83,12 @@ def delete(params) -> dict:
     children_ids = tree_handler.get_children_ids(node_id)
     tree_handler.delete_node(node_id)
     new_tree = tree_handler.sort_tree()
+    tree.tree = new_tree
 
     for del_id in children_ids:
-        db_client.delete_node(email, del_id)
+        db_client.delete_node(Node(email, del_id, ""))
 
-    db_client.delete_node(email, node_id)
-    db_client.put_tree(email, new_tree)
+    db_client.delete_node(Node(email, node_id, ""))
+    db_client.put_tree(tree)
 
     return {"tree": new_tree}
