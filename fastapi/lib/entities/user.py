@@ -26,8 +26,6 @@ class User:
 
     @options.setter
     def options(self, options):
-        if options is dict:
-            options = Options(options)
         self._options = options
 
     @property
@@ -37,6 +35,9 @@ class User:
             "password": self._password,
             "options": self._options.json,
         }
+
+    def set_options(self, options: dict) -> None:
+        self._options = Options(options)
 
 
 class Options:

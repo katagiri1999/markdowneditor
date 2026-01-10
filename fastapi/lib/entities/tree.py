@@ -17,8 +17,6 @@ class Tree:
 
     @node_tree.setter
     def node_tree(self, node_tree):
-        if type(node_tree) is dict:
-            node_tree = NodeTree(node_tree)
         self._node_tree = node_tree
 
     @property
@@ -27,6 +25,9 @@ class Tree:
             "email": self._email,
             "trees": self._node_tree.json,
         }
+
+    def set_node_tree(self, node_tree: dict) -> None:
+        self._node_tree = NodeTree(node_tree)
 
 
 class NodeTree:

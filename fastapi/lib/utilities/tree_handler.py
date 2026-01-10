@@ -7,7 +7,6 @@ class TreeHandler:
 
     def get_node(self, node_id: str) -> dict | None:
         parts = [p for p in node_id.split("/") if p]
-
         current: dict = self._node_tree
 
         for part in parts[1:]:
@@ -29,7 +28,7 @@ class TreeHandler:
     def get_parent_node(self, node_id: str) -> dict | None:
         parts = [p for p in node_id.split("/") if p]
         if len(parts) <= 1:
-            return None
+            raise errors.BadRequestError("TreeHandler.invalid_node_id")
 
         parent_id = "/" + "/".join(parts[:-1])
         return self.get_node(parent_id)
@@ -55,7 +54,6 @@ class TreeHandler:
             raise errors.BadRequestError("TreeHandler.invalid_node_id")
 
         children: list = parent_node["children"]
-
         for child in children:
             if child["id"] == new_node["id"]:
                 raise errors.ConflictError(f"TreeHandler.conflict_node")

@@ -52,7 +52,7 @@ def put(params) -> dict:
     }
     tree_handler.insert_node(new_node)
     new_node_tree = tree_handler.sort_tree()
-    tree.node_tree = new_node_tree
+    tree.set_node_tree(new_node_tree)
 
     new_node = Node(email, node_id, "")
 
@@ -83,7 +83,7 @@ def delete(params) -> dict:
     children_ids = tree_handler.get_children_ids(node_id)
     tree_handler.delete_node(node_id)
     new_node_tree = tree_handler.sort_tree()
-    tree.node_tree = new_node_tree
+    tree.set_node_tree(new_node_tree)
 
     for del_id in children_ids:
         db_client.delete_node(Node(email, del_id, ""))

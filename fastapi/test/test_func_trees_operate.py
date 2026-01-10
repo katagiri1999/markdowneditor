@@ -211,7 +211,7 @@ class TestFailDelete:
         logger(response)
         assert response["status_code"] == 403
 
-    def test_func_trees_operate_delete_non_exist1(self, id_token):
+    def test_func_trees_operate_delete_non_exist(self, id_token):
         params = {
             "method": "DELETE",
             "headers": {
@@ -225,7 +225,7 @@ class TestFailDelete:
         logger(response)
         assert response["status_code"] == 404
 
-    def test_func_trees_operate_delete_non_exist2(self, id_token):
+    def test_func_trees_operate_delete_invalid_node_id(self, id_token):
         params = {
             "method": "DELETE",
             "headers": {
@@ -237,4 +237,4 @@ class TestFailDelete:
         }
         response = func_trees_operate.main(params)
         logger(response)
-        assert response["status_code"] == 404
+        assert response["status_code"] == 400
