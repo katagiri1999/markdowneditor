@@ -1,6 +1,3 @@
-from lib.utilities import errors
-
-
 class Tree:
     def __init__(self, email: str, tree: dict):
         self._email = email
