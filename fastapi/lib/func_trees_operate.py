@@ -45,12 +45,7 @@ def put(params) -> dict:
         raise errors.NotFoundError("func_trees_operate.not_found")
 
     tree_handler = TreeHandler(tree.node_tree.json)
-    new_node = {
-        "id": node_id,
-        "label": label,
-        "children": [],
-    }
-    tree_handler.insert_node(new_node)
+    tree_handler.insert_node(node_id)
     new_node_tree = tree_handler.sort_tree()
     tree.set_node_tree(new_node_tree)
 

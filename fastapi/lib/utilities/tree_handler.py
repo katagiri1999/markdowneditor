@@ -5,7 +5,7 @@ class TreeHandler:
     def __init__(self, node_tree):
         self._node_tree = node_tree
 
-    def get_node(self, node_id: str) -> dict | None:
+    def get_node(self, node_id: str) -> dict:
         parts = [p for p in node_id.split("/") if p]
         current: dict = self._node_tree
 
@@ -17,15 +17,14 @@ class TreeHandler:
                 if child["label"] == part:
                     found = child
                     break
-
-            if not found:
-                return None
+            else:
+                raise errors.NotFoundError("TreeHandler.not_found")
 
             current = found
 
         return current
 
-    def get_parent_node(self, node_id: str) -> dict | None:
+    def get_parent_node(self, node_id: str) -> dict:
         parts = [p for p in node_id.split("/") if p]
         if len(parts) <= 1:
             raise errors.BadRequestError("TreeHandler.invalid_node_id")
@@ -36,8 +35,6 @@ class TreeHandler:
     def get_children_ids(self, node_id: str) -> list[str]:
         target = self.get_node(node_id)
         result = []
-        if target is None:
-            return result
 
         def collect(node: dict):
             for child in node["children"]:
@@ -47,31 +44,29 @@ class TreeHandler:
         collect(target)
         return result
 
-    def insert_node(self, new_node: dict) -> None:
-        node_id = new_node["id"]
+    def insert_node(self, node_id: str) -> None:
         parent_node = self.get_parent_node(node_id)
-        if parent_node is None:
-            raise errors.BadRequestError("TreeHandler.invalid_node_id")
-
         children: list = parent_node["children"]
         for child in children:
-            if child["id"] == new_node["id"]:
+            if child["id"] == node_id:
                 raise errors.ConflictError(f"TreeHandler.conflict_node")
 
-        children.append(new_node)
+        label = node_id.split("/")[-1]
+        children.append({
+            "id": node_id,
+            "label": label,
+            "children": [],
+        })
 
     def delete_node(self, node_id: str) -> None:
         parent_node = self.get_parent_node(node_id)
-        if parent_node is None:
-            raise errors.NotFoundError("TreeHandler.not_found")
-
         children: list = parent_node["children"]
         for i, child in enumerate(children):
             if child["id"] == node_id:
                 del children[i]
                 return
-
-        raise errors.NotFoundError("TreeHandler.not_found")
+        else:
+            raise errors.NotFoundError("TreeHandler.not_found")
 
     def sort_tree(self, node_tree: dict | None = None) -> dict:
         if node_tree is None:
