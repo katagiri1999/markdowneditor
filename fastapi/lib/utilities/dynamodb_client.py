@@ -1,6 +1,6 @@
 import boto3
 from boto3.dynamodb.conditions import Key
-from mypy_boto3_dynamodb.service_resource import Table
+from mypy_boto3_dynamodb import service_resource
 
 from lib import config
 from lib.entities.node import Node
@@ -10,7 +10,8 @@ from lib.entities.user import User
 
 class DynamoDBClient:
     def __init__(self):
-        self._db_client: Table = boto3.resource("dynamodb").Table(config.TABLE_NAME)
+        self._resource: service_resource = boto3.resource("dynamodb")
+        self._db_client = self._resource.Table(config.TABLE_NAME)
 
     ###############################
     # For User
