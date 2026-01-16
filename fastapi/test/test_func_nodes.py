@@ -107,6 +107,20 @@ class TestFailGet:
 
 class TestSuccessPut:
     def test_func_nodes_put_normal(self, id_token):
+        # First, get the current text
+        params = {
+            "method": "GET",
+            "headers": {
+                "content-type": "application/json",
+                "authorization": f"Bearer {id_token}"
+            },
+            "body": {},
+            "query_params": {"node_id": "/Nodes"},
+        }
+        response = func_nodes.main(params)
+        assert response["status_code"] == 200
+        before = response["body"]["node"]["text"]
+
         text = """
             # MarkdownEditor
 
@@ -138,6 +152,21 @@ class TestSuccessPut:
         assert node["text"] == text
         assert "email" in node
         assert "id" in node
+
+        # Restore previous text
+        params = {
+            "method": "PUT",
+            "headers": {
+                "content-type": "application/json",
+                "authorization": f"Bearer {id_token}"
+            },
+            "body": {
+                "node_id": "/Nodes",
+                "text": f"{before}",
+            },
+            "query_params": {},
+        }
+        func_nodes.main(params)
 
     def test_func_nodes_put_empty_text(self, id_token):
         # First, get the current text
