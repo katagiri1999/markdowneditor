@@ -1,0 +1,14 @@
+.heading-anchor {
+  margin-right: 4px;
+  color: black;
+}
+
+table {
+  border-collapse: collapse;
+
+  td,
+  th {
+    padding: 3px;
+    border: 1px solid black;
+  }
+}

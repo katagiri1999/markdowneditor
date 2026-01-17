@@ -1,4 +1,5 @@
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import SaveAltOutlinedIcon from '@mui/icons-material/SaveAltOutlined';
 import { Box, IconButton } from '@mui/material';
 import "../css/editor_header.css";
@@ -13,11 +14,16 @@ function EditorHeader(props: { markdownValue: string }) {
   const markdownValue = props.markdownValue;
   const location = useLocation();
 
-  const { id_token } = userStore();
+  const { id_token, setPreviewText } = userStore();
   const { setLoading } = loadingState();
 
   const searchParams = new URLSearchParams(location.search);
   const url_node_id = searchParams.get('node_id') as string;
+
+  function preview() {
+    setPreviewText(markdownValue);
+    window.open(`/preview?node_id=local`, '_blank');
+  };
 
   function download() {
     const file_name = url_node_id.split("/").pop();
@@ -41,6 +47,10 @@ function EditorHeader(props: { markdownValue: string }) {
   return (
     <>
       <Box sx={{ mb: 1, mr: 3 }}>
+        <IconButton id="save" sx={{ ml: 1 }} onClick={preview}>
+          <RemoveRedEyeIcon />
+        </IconButton>
+
         <IconButton id="download" sx={{ ml: 1 }} onClick={download}>
           <SaveAltOutlinedIcon />
         </IconButton>

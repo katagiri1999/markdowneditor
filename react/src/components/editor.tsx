@@ -53,7 +53,7 @@ export const Editor = () => {
     placeholder: "",
     lineNumbers: true,
     sideBySideFullscreen: false,
-    toolbar: ["heading", "bold", "italic", "quote", "unordered-list", "ordered-list", "link", "|", "preview", "side-by-side", "fullscreen",]
+    toolbar: ["heading", "bold", "italic", "quote", "unordered-list", "ordered-list", "link",]
   }), []);
 
   return (

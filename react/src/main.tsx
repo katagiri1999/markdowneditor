@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Loading from './components/loading';
-import Information from './views/information';
 import Main from './views/main';
+import Preview from './views/preview';
 import Top from './views/top';
 import Verify from './views/verify';
 
@@ -18,8 +18,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Top />} />
         <Route path="/main" element={<Main />} />
-        <Route path="/information" element={<Information />} />
         <Route path="/verify" element={<Verify />} />
+        <Route path="/preview" element={<Preview />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

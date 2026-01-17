@@ -4,11 +4,10 @@
 [![CICD Workflow](https://github.com/cloudjex/markdowneditor/actions/workflows/cicd.yaml/badge.svg)](https://github.com/cloudjex/markdowneditor/actions/workflows/cicd.yaml)
 
 ## Summary
-markdown管理アプリ用のPublicRepository。  
-Serverless Architectureを使用した、シンプルなFrontend/Backend構成。  
-Serverlessを採用し、安価に構築/運用。OSS Applicationとして公開中。
-
-App: [cloudjex.com](https://www.cloudjex.com)
+- markdown管理アプリ用のPublicRepository
+- Serverless Architectureを使用した、シンプルなFrontend/Backend構成
+- OSS Applicationとして公開中
+	- App: [cloudjex.com](https://www.cloudjex.com)
 
 ## System Overview
 以下のFramework/技術要素を使用
@@ -19,8 +18,6 @@ App: [cloudjex.com](https://www.cloudjex.com)
 | React              | TypeScript | Frontend |
 | GithubActions      | yaml       | CICD     |
 | Terraform          | tf         | CICD     |
-
-<br>
 
 以下のサービスを使用
 
@@ -38,8 +35,8 @@ App: [cloudjex.com](https://www.cloudjex.com)
 
 NoSQL(ドキュメント指向DB)を使用し、Itemは単一テーブルに格納  
 
-主キー: `PK`  
-ソートキー: `SK`
+- 主キー: `PK`  
+- ソートキー: `SK`
 
 ### user item
 | key       | type   | desctiption            | description        |

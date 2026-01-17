@@ -77,9 +77,6 @@ function Profile() {
             },
           }}
         >
-          <MenuItem onClick={() => clickInformation("/information")}>
-            Information
-          </MenuItem>
           <MenuItem onClick={() => clickInformation("https://github.com/cloudjex/markdowneditor")}>
             Github
           </MenuItem>

@@ -8,12 +8,14 @@ interface UserState {
   password: string;
   id_token: string;
   node_tree: NodeTree | null;
+  preview_text: string,
 
   /* eslint-disable no-unused-vars */
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   setIdToken: (id_token: string) => void;
   setNodeTree: (node_tree: NodeTree | null) => void;
+  setPreviewText: (preview_text: string) => void;
 
   resetUserState: () => void;
 }
@@ -24,11 +26,13 @@ const userStore = create<UserState>()(
     password: "",
     id_token: "",
     node_tree: null,
+    preview_text: "",
 
     setEmail: (email: string): void => { set({ email }); },
     setPassword: (password: string): void => { set({ password }); },
     setIdToken: (id_token: string): void => { set({ id_token }); },
     setNodeTree: (node_tree: NodeTree | null): void => { set({ node_tree }); },
+    setPreviewText: (preview_text: string): void => { set({ preview_text }); },
 
     resetUserState: () => set({
       email: "",
