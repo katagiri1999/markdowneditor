@@ -1,4 +1,4 @@
-from lib import func_signin
+from funcs import func_signin
 
 from .conftest import logger
 

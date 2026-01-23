@@ -1,0 +1,33 @@
+import { Breadcrumbs, Link } from '@mui/material';
+
+import TreeHandler from '../../lib/tree_handler';
+
+import type { NodeTree } from "../../lib/types";
+
+function Breadcrumb(props: { node_id: string, node_tree: NodeTree }) {
+  const tree_handler = new TreeHandler(props.node_tree);
+
+  let parentNodes: NodeTree[] = [];
+  const parents = tree_handler.getParentNodeIds(props.node_id);
+  parentNodes = parents.map((id) => tree_handler.getNode(id)).filter(node => node != null);
+  const this_node = tree_handler.getNode(props.node_id);
+  if (this_node) parentNodes.push(this_node);
+
+  return (
+    <Breadcrumbs separator="›" aria-label="breadcrumb">
+      {parentNodes.map((node, index) => (
+        <Link
+          key={node.id}
+          underline="none"
+          color={index === parentNodes.length - 1 ? "textDisabled" : "textSecondary"}
+          href={index === parentNodes.length - 1 ? undefined : `/main?id=${node.id}`}
+          aria-current={index === parentNodes.length - 1 ? "page" : undefined}
+        >
+          {node.label}
+        </Link>
+      ))}
+    </Breadcrumbs>
+  );
+}
+
+export default Breadcrumb;

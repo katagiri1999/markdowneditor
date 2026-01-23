@@ -5,8 +5,8 @@ from mangum import Mangum
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from lib import (func_nodes, func_signin, func_signout, func_signup,
-                 func_signup_verify, func_trees, func_trees_operate)
+from funcs import (func_nodes, func_signin, func_signout, func_signup,
+                   func_signup_verify, func_trees, func_trees_operate)
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -56,7 +56,7 @@ async def handle_trees(request: Request):
     return handle_response(res)
 
 
-@app.api_route("/api/trees/operate", methods=["PUT", "DELETE"])
+@app.api_route("/api/trees/operate", methods=["POST", "DELETE"])
 async def handle_trees_operate(request: Request):
     params = await handle_request(request)
     res = func_trees_operate.main(params)

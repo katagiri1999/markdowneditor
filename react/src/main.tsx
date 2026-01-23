@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import Loading from './components/loading';
+import Loading from './components/loading/loading';
 import Main from './views/main';
 import Preview from './views/preview';
 import Top from './views/top';

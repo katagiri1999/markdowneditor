@@ -1,12 +1,12 @@
 import { Container, Tabs, Tab, Box } from "@mui/material";
 import { useState } from "react";
 
-import Header from "../components/header";
-import Signin from "../components/signin";
-import Signup from "../components/signup";
+import Signin from "../components/auth/signin";
+import Signup from "../components/auth/signup";
+import Header from "../components/header/header";
 
 function Top() {
-  const [tab, setTab] = useState<number>(0);
+  const [tab, setTab] = useState(0);
 
   return (
     <>

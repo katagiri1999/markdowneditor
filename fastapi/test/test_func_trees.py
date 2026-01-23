@@ -1,4 +1,4 @@
-from lib import func_trees
+from funcs import func_trees
 
 from .conftest import logger
 

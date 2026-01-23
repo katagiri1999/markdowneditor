@@ -1,4 +1,4 @@
-from lib import func_signout
+from funcs import func_signout
 
 from .conftest import logger
 

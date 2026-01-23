@@ -1,4 +1,4 @@
-from lib import func_signup_verify
+from funcs import func_signup_verify
 
 from .conftest import logger
 
