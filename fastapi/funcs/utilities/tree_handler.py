@@ -5,9 +5,9 @@ class TreeHandler:
     def __init__(self, tree):
         self._tree = tree
 
-    def get_node(self, id: str) -> dict:
+    def get_node(self, node_id: str) -> dict:
         def recursive(node: dict) -> dict | None:
-            if node["id"] == id:
+            if node["id"] == node_id:
                 return node
             for child in node["children"]:
                 result = recursive(child)
@@ -20,10 +20,10 @@ class TreeHandler:
             raise errors.NotFoundError("TreeHandler.not_found")
         return result
 
-    def get_parent_node(self, id: str) -> dict:
+    def get_parent_node(self, node_id: str) -> dict:
         def find_parent(node: dict) -> dict | None:
             for child in node["children"]:
-                if child["id"] == id:
+                if child["id"] == node_id:
                     return node
                 result = find_parent(child)
                 if result is not None:
@@ -35,8 +35,8 @@ class TreeHandler:
             raise errors.NotFoundError("TreeHandler.not_found")
         return parent
 
-    def get_children_ids(self, id: str) -> list[str]:
-        target = self.get_node(id)
+    def get_children_ids(self, node_id: str) -> list[str]:
+        target = self.get_node(node_id)
         result = []
 
         def collect(node: dict):
@@ -52,11 +52,15 @@ class TreeHandler:
         parent_children: list[dict] = parent_node["children"]
         parent_children.append(new_node)
 
-    def del_node(self, id: str):
-        parent_node = self.get_parent_node(id)
+    def update_node_label(self, node_id: str, label: dict):
+        node = self.get_node(node_id)
+        node["label"] = label
+
+    def del_node(self, node_id: str):
+        parent_node = self.get_parent_node(node_id)
         children: list = parent_node["children"]
         for i, child in enumerate(children):
-            if child["id"] == id:
+            if child["id"] == node_id:
                 del children[i]
                 return
         raise errors.NotFoundError("TreeHandler.not_found")

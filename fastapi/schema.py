@@ -26,6 +26,10 @@ class TreePostReq(BaseModel):
     label: str
 
 
+class TreePutReq(BaseModel):
+    label: str
+
+
 class NodePutReq(BaseModel):
     text: str
 

@@ -64,6 +64,66 @@ class TestFailPost:
         assert res.status_code == 422
 
 
+class TestSuccessPut:
+    def test_func_trees_operate_put_normal(self, id_token):
+        global new_node
+        put_node_id = new_node["id"]
+        new_label = str(time.time())
+        res = fa_client.put(
+            url=f"/api/trees/operate/{put_node_id}",
+            headers={"Authorization": id_token},
+            json={
+                "label": new_label,
+            }
+        )
+        assert res.status_code == 200
+
+        body = res.json()
+        children = body["children"]
+
+        check_node = None
+        for child in children:
+            if child["label"] == new_label:
+                check_node = child
+        assert check_node is not None
+        assert type(check_node["id"]) is str
+        assert type(check_node["label"]) is str
+        assert type(check_node["children"]) is list
+
+
+class TestFailPut:
+    def test_func_trees_operate_put_no_token(self):
+        res = fa_client.put(
+            url="/api/trees/operate/test",
+        )
+        assert res.status_code == 401
+
+    def test_func_trees_operate_put_invalid_token(self, invalid_id_token):
+        res = fa_client.put(
+            url="/api/trees/operate/test",
+            headers={"Authorization": invalid_id_token}
+        )
+        assert res.status_code == 401
+
+    def test_func_trees_operate_put_nonuser_token(self, nonuser_id_token):
+        res = fa_client.put(
+            url="/api/trees/operate/test",
+            headers={"Authorization": nonuser_id_token},
+            json={
+                "label": "invalid",
+            }
+        )
+        assert res.status_code == 404
+
+    def test_func_trees_operate_put_no_params(self, id_token):
+        res = fa_client.put(
+            url="/api/trees/operate/test",
+            headers={"Authorization": id_token},
+            json={}
+        )
+        assert res.status_code == 422
+
+
 class TestSuccessDelete:
     def test_func_trees_operate_delete_normal(self, id_token):
         global new_node
