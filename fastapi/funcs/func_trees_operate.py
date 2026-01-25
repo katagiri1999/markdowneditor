@@ -39,6 +39,27 @@ def post(email: str, parent_id: str, label: str) -> dict:
     return new_tree
 
 
+def put(email: str, node_id: str, label: str) -> dict:
+    db_client = DynamoDBClient()
+
+    tree_info = db_client.get_tree_info(email)
+    if not tree_info:
+        raise errors.NotFoundError("func_trees_operate.not_found")
+
+    tree_handler = TreeHandler(tree_info.tree.to_dict())
+    tree_handler.update_node_label(node_id, label)
+    new_tree = tree_handler.sort_tree()
+
+    tree_info.tree = Tree(
+        new_tree["id"],
+        new_tree["label"],
+        new_tree["children"]
+    )
+
+    db_client.put_tree_info(tree_info)
+    return new_tree
+
+
 def delete(email: str, node_id: str) -> dict:
     db_client = DynamoDBClient()
 

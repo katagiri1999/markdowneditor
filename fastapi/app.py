@@ -17,10 +17,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-app = FastAPI(
-    title="cloudjex.com",
-    description="## OpenAPI for cloudjex.com",
-)
+app = FastAPI(title="cloudjex.com", description="## OpenAPI for cloudjex.com")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -127,7 +124,7 @@ async def handle_signup(req: schema.SignUpReq):
 @app.post(
     path="/api/signup/verify",
     tags=["Auth"],
-    summary="User verification",
+    summary="Email verification",
     response_model=schema.ResultRes,
     responses={
         401: {"description": "UnauthorizedError"},
@@ -166,7 +163,7 @@ async def handle_trees(jwt: dict = Depends(verify_token)):
 @app.post(
     path="/api/trees/operate",
     tags=["Tree"],
-    summary="Update tree",
+    summary="Update tree, Insert node",
     response_model=schema.Tree,
     responses={
         401: {"description": "UnauthorizedError"},
@@ -176,10 +173,23 @@ async def handle_trees_operate(req: schema.TreePostReq, jwt: dict = Depends(veri
     return func_trees_operate.post(jwt["email"], req.parent_id, req.label)
 
 
+@app.put(
+    path="/api/trees/operate/{id}",
+    tags=["Tree"],
+    summary="Update tree, Update node",
+    response_model=schema.Tree,
+    responses={
+        401: {"description": "UnauthorizedError"},
+    },
+)
+async def handle_trees_operate(id, req: schema.TreePutReq, jwt: dict = Depends(verify_token),):
+    return func_trees_operate.put(jwt["email"], id, req.label)
+
+
 @app.delete(
     path="/api/trees/operate/{id}",
     tags=["Tree"],
-    summary="Update tree",
+    summary="Update tree, Delete node",
     response_model=schema.Tree,
     responses={
         401: {"description": "UnauthorizedError"},
