@@ -21,7 +21,7 @@ function Explorer(props: { node_id: string, tree: Tree }) {
   const tree_handler = new TreeHandler(props.tree);
   const parents = tree_handler.getParentNodeIds(props.node_id);
   const displayedExpanded = [
-    ...new Set([...expandedItems, ...parents]),
+    ...new Set([props.tree.id, ...expandedItems, ...parents]),
   ];
 
   async function updateLabel(node_id: string, label: string) {
