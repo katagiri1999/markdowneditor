@@ -40,7 +40,7 @@ function Profile() {
       >
 
         <Tooltip title={`Sign In: ${email}`}>
-          <Avatar>{email.charAt(0).toUpperCase()}</Avatar>
+          <Avatar />
         </Tooltip>
 
       </IconButton>
