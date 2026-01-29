@@ -138,12 +138,12 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
         open={modalKind == 1}
       >
         <DialogTitle>
-          ラベルを更新
+          ラベル更新
         </DialogTitle>
 
         <DialogContent>
           <TextField
-            label="label"
+            label="ラベルを入力してください"
             variant="standard"
             value={newLabel}
             onChange={(e) => setNewLabel(e.target.value)}

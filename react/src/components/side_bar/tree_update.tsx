@@ -99,26 +99,25 @@ function TreeUpdate(props: { node_id: string, tree: Tree }) {
 
       <Dialog onClose={closeModal} open={modalKind == 1}>
         <DialogTitle>
-          Nodeを作成
+          ページを作成
         </DialogTitle>
 
         <Container
           component="form"
           sx={{ '& > :not(style)': { m: 2, width: '25ch' } }}
           noValidate
-          autoComplete="off"
         >
           <TextField
             id="outlined-basic"
-            label="親Node"
-            variant="outlined"
+            label="親ラベル"
+            variant="standard"
             disabled
-            value={`${current_label}/`}
+            value={current_label}
           />
           <TextField
             id="outlined-basic"
-            label="Node"
-            variant="outlined"
+            label="ラベルを入力してください"
+            variant="standard"
             value={newNodeLabel}
             onChange={(e) => setNewNodeLabel(e.target.value)}
           />
@@ -126,7 +125,7 @@ function TreeUpdate(props: { node_id: string, tree: Tree }) {
 
         {isInvalidLabel &&
           <Alert severity="error" sx={{ mx: 3 }}>
-            Node名を入力してください。
+            ラベルを入力してください。
           </Alert>
         }
 
@@ -138,12 +137,11 @@ function TreeUpdate(props: { node_id: string, tree: Tree }) {
 
       <Dialog onClose={closeModal} open={modalKind == 2}>
         <DialogTitle>
-          Nodeを削除
+          ページを削除
         </DialogTitle>
 
         <DialogContent>
-          現在のNodeとすべての子Nodeが削除されます。
-          削除しますか？
+          現在のページとその配下のページを削除します。よろしいですか？
         </DialogContent>
 
         <DialogActions>
