@@ -31,8 +31,8 @@ jobs:
         working-directory: ./fastapi
         run: |
           pip install -r requirements.txt
-          pip install pytest pytest-xdist
-          pytest -n auto --dist loadfile
+          pip install pytest
+          pytest
 
       - name: Build Lambda package
         run: |

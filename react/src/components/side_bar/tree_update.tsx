@@ -42,11 +42,10 @@ function TreeUpdate(props: { node_id: string, tree: Tree }) {
     closeModal();
     setLoading(true);
 
-    const res_promise = requests.post<Tree>(
-      `${import.meta.env.VITE_API_HOST}/api/tree/operate`,
+    const res = await requests.post<Tree>(
+      `${import.meta.env.VITE_API_HOST}/api/tree/node`,
       { parent_id: props.node_id, label: newNodeLabel }
     );
-    const res = await res_promise;
 
     setTree(res.body);
     setLoading(false);
@@ -56,18 +55,17 @@ function TreeUpdate(props: { node_id: string, tree: Tree }) {
     closeModal();
     setLoading(true);
 
-    const delete_node_id = props.node_id;
-    const parent_node = tree_handler.getParentNode(delete_node_id);
-    const next_node = parent_node?.id || props.tree.id;
+    const del_node_id = props.node_id;
+    const parent_node = tree_handler.getParentNode(del_node_id);
+    const next_node_id = parent_node?.id || props.tree.id;
 
-    const res_promise = requests.delete<Tree>(
-      `${import.meta.env.VITE_API_HOST}/api/tree/operate/${delete_node_id}`,
+    const res = await requests.delete<Tree>(
+      `${import.meta.env.VITE_API_HOST}/api/tree/node/${del_node_id}`,
     );
-    const res = await res_promise;
 
     setLoading(false);
     setTree(res.body);
-    navigate(`/main/${next_node}`);
+    navigate(`/main/${next_node_id}`);
   };
 
   return (

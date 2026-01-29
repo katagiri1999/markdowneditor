@@ -22,7 +22,7 @@ def post(email: str, otp: str) -> dict:
     initial_id = str(uuid.uuid4())
     initial_tree = {
         "id": initial_id,
-        "label": "Nodes",
+        "label": "ROOT",
         "children": [],
     }
     initial_tree_info = TreeInfo(user.email, initial_tree)
