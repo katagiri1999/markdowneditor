@@ -1,11 +1,13 @@
 import { AppBar, Toolbar, Typography } from '@mui/material';
 
+import type { Tree } from "@/src/lib/types";
+
 import Profile from '@/src/components/header/profile';
 import Sidebar from '@/src/components/side_bar/sidebar';
 import userStore from '@/src/store/user_store';
 
 
-function Header() {
+function Header(props: { tree: Tree, node_id: string }) {
   const { id_token } = userStore();
 
   return (
@@ -13,7 +15,7 @@ function Header() {
       <Toolbar style={{ display: "flex" }}>
 
         {id_token &&
-          <Sidebar />
+          <Sidebar tree={props.tree} node_id={props.node_id} />
         }
 
         <Typography

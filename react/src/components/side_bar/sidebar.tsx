@@ -1,19 +1,15 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import { Container, Drawer, IconButton, Tooltip, Typography } from '@mui/material';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+
+import type { Tree } from "@/src/lib/types";
 
 
 import Explorer from '@/src/components/side_bar/explorer';
 import TreeUpdate from '@/src/components/side_bar/tree_update';
-import userStore from '@/src/store/user_store';
 
 
-function Sidebar() {
-  const urlParams = useParams<{ id: string }>();
-  const url_node_id = urlParams.id || "";
-
-  const { tree } = userStore();
+function Sidebar(props: { tree: Tree, node_id: string }) {
   const [drawewrOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -51,8 +47,8 @@ function Sidebar() {
             Explorer
           </Typography>
 
-          <TreeUpdate node_id={url_node_id} tree={tree} />
-          <Explorer node_id={url_node_id} tree={tree} />
+          <TreeUpdate node_id={props.node_id} tree={props.tree} />
+          <Explorer node_id={props.node_id} tree={props.tree} />
 
         </Container>
       </Drawer >

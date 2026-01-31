@@ -17,7 +17,7 @@ import loadingState from "@/src/store/loading_store";
 import userStore from "@/src/store/user_store";
 
 
-export default function Preview() {
+function Preview() {
   const { id_token, preview_text } = userStore();
   const { setLoading } = loadingState();
   const [previewText, setPreviewText] = useState("");
@@ -25,12 +25,11 @@ export default function Preview() {
   const requests = new RequestHandler(id_token);
 
   const location = useLocation();
-  const urlParams = useParams<{ id: string }>();
-  const url_node_id = urlParams.id || "";
+  const node_id = useParams<{ id: string }>().id || "";
 
   useEffect(() => {
     async function fetchPreview() {
-      if (url_node_id === "state") {
+      if (node_id === "state") {
         setPreviewText(preview_text);
         return;
       }
@@ -38,7 +37,7 @@ export default function Preview() {
       setLoading(true);
 
       const res = await requests.get<Node>(
-        `${import.meta.env.VITE_API_HOST}/api/nodes/${url_node_id}`,
+        `${import.meta.env.VITE_API_HOST}/api/nodes/${node_id}`,
       );
 
       setLoading(false);
@@ -46,7 +45,7 @@ export default function Preview() {
     };
 
     fetchPreview();
-  }, [url_node_id]);
+  }, [node_id]);
 
   useEffect(() => {
     if (location.hash) {
@@ -105,3 +104,5 @@ export default function Preview() {
     </>
   );
 }
+
+export default Preview;
