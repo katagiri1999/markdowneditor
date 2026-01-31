@@ -16,7 +16,7 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
   const { setLoading } = loadingState();
 
   const [isMenuOpen, setIsMenuOpen] = useState<null | HTMLElement>(null);
-  // 0: null, 1: label update
+  // 0: null, 1: label update, 2: move page
   const [modalKind, setModalKind] = useState(0);
   const [newLabel, setNewLabel] = useState("");
   const [isInvalidLabel, setIsInvalidLabel] = useState(false);
@@ -128,6 +128,14 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
           >
             ラベル更新
           </MenuItem>
+          <MenuItem
+            sx={{ fontSize: "80%" }}
+            onClick={() => {
+              setModalKind(2);
+            }}
+          >
+            ページ移動
+          </MenuItem>
 
         </Menu>
 
@@ -163,6 +171,24 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
           >
             OK
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        onClose={() => closeModal()}
+        open={modalKind == 2}
+      >
+        <DialogTitle>
+          ページ移動
+        </DialogTitle>
+
+        <DialogContent>
+          
+        </DialogContent>
+
+
+        <DialogActions>
+          
         </DialogActions>
       </Dialog>
     </>
