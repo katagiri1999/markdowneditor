@@ -1,6 +1,6 @@
 import { Breadcrumbs, Link } from '@mui/material';
 
-import type { Tree as Tree } from "@/src/lib/types";
+import type { Tree } from "@/src/lib/types";
 
 import TreeHandler from '@/src/lib/tree_handler';
 

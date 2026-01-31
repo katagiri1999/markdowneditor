@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-import type { SigninForm, SigninResponse, Tree } from "../../lib/types";
+import type { SigninForm, SigninResponse, Tree } from "@/src/lib/types";
 
 import RequestHandler from "@/src/lib/request_handler";
 import loadingState from "@/src/store/loading_store";
