@@ -232,24 +232,6 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Dialog
-        onClose={() => closeModal()}
-        open={modalKind == 2}
-      >
-        <DialogTitle>
-          ページ移動
-        </DialogTitle>
-
-        <DialogContent>
-          
-        </DialogContent>
-
-
-        <DialogActions>
-          
-        </DialogActions>
-      </Dialog>
     </>
   );
 }
