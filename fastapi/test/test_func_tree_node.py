@@ -1,16 +1,16 @@
 import time
 
-from .conftest import ROOT_NODE_ID, fa_client
+from .conftest import fa_client
 
 
 class TestSuccessPost:
-    def test_func_tree_node_post_normal(self, id_token):
+    def test_func_tree_node_post_normal(self, id_token, root_node_id):
         new_node_label = str(time.time())
         res = fa_client.post(
             url="/api/tree/node",
             headers={"Authorization": id_token},
             json={
-                "parent_id": ROOT_NODE_ID,
+                "parent_id": root_node_id,
                 "label": new_node_label,
             }
         )
@@ -92,9 +92,9 @@ class TestFailDelete:
         )
         assert res.status_code == 404
 
-    def test_func_tree_node_delete_root(self, id_token):
+    def test_func_tree_node_delete_root(self, id_token, root_node_id):
         res = fa_client.delete(
-            url=f"/api/tree/node/{ROOT_NODE_ID}",
+            url=f"/api/tree/node/{root_node_id}",
             headers={"Authorization": id_token},
         )
         assert res.status_code == 403

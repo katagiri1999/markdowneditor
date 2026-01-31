@@ -6,10 +6,23 @@ from funcs.utilities.jwt_client import JwtClient
 
 EMAIL = "test@gmail.com"
 NONUSER_EMAIL = "nonuser@gmail.com"
-ROOT_NODE_ID = "1b92557a-74cb-4553-a791-529286d3b795"
 
 
 fa_client = TestClient(app.app)
+
+
+@pytest.fixture(scope="session")
+def root_node_id(id_token):
+    res = fa_client.get(
+        url="/api/tree",
+        headers={"Authorization": id_token}
+    )
+    assert res.status_code == 200
+
+    body: dict = res.json()
+    assert type(body) is dict
+    assert type(body["id"]) is str
+    return body["id"]
 
 
 @pytest.fixture(scope="session")

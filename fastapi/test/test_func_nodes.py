@@ -1,6 +1,6 @@
 import textwrap
 
-from .conftest import ROOT_NODE_ID, fa_client
+from .conftest import fa_client
 
 
 class TestSuccessGET:
@@ -18,9 +18,9 @@ class TestSuccessGET:
         assert type(nodes[0]["email"]) is str
         assert type(nodes[0]["text"]) is str
 
-    def test_func_nodes_get_normal_with_id(self, id_token):
+    def test_func_nodes_get_normal_with_id(self, id_token, root_node_id):
         res = fa_client.get(
-            url=f"/api/nodes/{ROOT_NODE_ID}",
+            url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
         )
         assert res.status_code == 200
@@ -54,10 +54,10 @@ class TestFailGet:
 
 
 class TestSuccessPut:
-    def test_func_nodes_put_normal(self, id_token):
+    def test_func_nodes_put_normal(self, id_token, root_node_id):
         # First, get the current text
         res = fa_client.get(
-            url=f"/api/nodes/{ROOT_NODE_ID}",
+            url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
         )
         assert res.status_code == 200
@@ -76,7 +76,7 @@ class TestSuccessPut:
         text = textwrap.dedent(text).strip("\n")
 
         res = fa_client.put(
-            url=f"/api/nodes/{ROOT_NODE_ID}",
+            url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
             json={
                 "text": f"{text}",
@@ -92,7 +92,7 @@ class TestSuccessPut:
 
         # Restore previous text
         res = fa_client.put(
-            url=f"/api/nodes/{ROOT_NODE_ID}",
+            url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
             json={
                 "text": f"{before}",
@@ -100,10 +100,10 @@ class TestSuccessPut:
         )
         assert res.status_code == 200
 
-    def test_func_nodes_put_empty_text(self, id_token):
+    def test_func_nodes_put_empty_text(self, id_token, root_node_id):
         # First, get the current text
         res = fa_client.get(
-            url=f"/api/nodes/{ROOT_NODE_ID}",
+            url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
         )
         assert res.status_code == 200
@@ -111,7 +111,7 @@ class TestSuccessPut:
 
         # Test
         res = fa_client.put(
-            url=f"/api/nodes/{ROOT_NODE_ID}",
+            url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
             json={
                 "text": "",
@@ -127,7 +127,7 @@ class TestSuccessPut:
 
         # Restore previous text
         res = fa_client.put(
-            url=f"/api/nodes/{ROOT_NODE_ID}",
+            url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
             json={
                 "text": f"{before}",
