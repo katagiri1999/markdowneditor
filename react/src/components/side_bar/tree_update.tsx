@@ -16,26 +16,25 @@ function TreeUpdate(props: { node_id: string, tree: Tree }) {
   const navigate = useNavigate();
   const { id_token, setTree } = userStore();
   const { setLoading } = loadingState();
-  const root_node_id = props.tree.node_id;
 
+  const [labelInput, setLabelInput] = useState({
+    label: "",
+    isInvalid: false,
+  });
   // 0: null, 1: post, 2: del
   const [modalKind, setModalKind] = useState(0);
-  const [isInvalidLabel, setIsInvalidLabel] = useState(false);
-  const [newNodeLabel, setNewNodeLabel] = useState("");
 
   const requests = new RequestHandler(id_token);
   const tree_handler = new TreeHandler(props.tree);
-  const current_label = tree_handler.getNode(props.node_id)?.label;
 
   function closeModal() {
-    setNewNodeLabel("");
-    setIsInvalidLabel(false);
+    setLabelInput({ label: "", isInvalid: false, });
     setModalKind(0);
   };
 
-  async function clickCreateNewContent() {
-    if (!newNodeLabel) {
-      setIsInvalidLabel(true);
+  async function clickCreateNewContent(label: string) {
+    if (!label) {
+      setLabelInput({ ...labelInput, isInvalid: true });
       throw new Error("newContentName is invalid");
     };
 
@@ -44,7 +43,7 @@ function TreeUpdate(props: { node_id: string, tree: Tree }) {
 
     const res = await requests.post<Tree>(
       `${import.meta.env.VITE_API_HOST}/api/tree/node`,
-      { parent_id: props.node_id, label: newNodeLabel }
+      { parent_id: props.node_id, label: label }
     );
 
     setTree(res.body);
@@ -88,7 +87,7 @@ function TreeUpdate(props: { node_id: string, tree: Tree }) {
         <Button
           onClick={() => setModalKind(2)}
           size="small"
-          disabled={props.node_id === root_node_id}
+          disabled={props.node_id === props.tree.node_id}
           variant="outlined"
           color="error"
         >
@@ -112,25 +111,30 @@ function TreeUpdate(props: { node_id: string, tree: Tree }) {
             label="親ラベル"
             variant="standard"
             disabled
-            value={current_label}
+            value={tree_handler.getNode(props.node_id)?.label}
           />
           <TextField
             id="outlined-basic"
             label="ラベルを入力してください"
             variant="standard"
-            value={newNodeLabel}
-            onChange={(e) => setNewNodeLabel(e.target.value)}
+            value={labelInput.label}
+            onChange={(e) => setLabelInput({ ...labelInput, label: e.target.value })}
           />
         </Container>
 
-        {isInvalidLabel &&
+        {labelInput.isInvalid &&
           <Alert severity="error" sx={{ mx: 3 }}>
             ラベルを入力してください。
           </Alert>
         }
 
         <DialogActions>
-          <Button autoFocus onClick={clickCreateNewContent}>OK</Button>
+          <Button
+            autoFocus
+            onClick={() => clickCreateNewContent(labelInput.label)}
+          >
+            OK
+          </Button>
         </DialogActions>
 
       </Dialog>

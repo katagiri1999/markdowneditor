@@ -18,9 +18,15 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
   const [isMenuOpen, setIsMenuOpen] = useState<null | HTMLElement>(null);
   // 0: null, 1: label update, 2: move page
   const [modalKind, setModalKind] = useState(0);
-  const [newLabel, setNewLabel] = useState("");
-  const [isInvalid, setIsInvalid] = useState(false);
-  const [destination, setDestination] = useState("");
+
+  const [labelInput, setLabelInput] = useState({
+    label: "",
+    isInvalid: false,
+  });
+  const [moveInput, setMoveInput] = useState({
+    parent_id: "",
+    isInvalid: false,
+  });
 
   const requests = new RequestHandler(id_token);
   const tree_handler = new TreeHandler(props.tree);
@@ -39,15 +45,15 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
   };
 
   function closeModal() {
-    setNewLabel("");
-    setIsInvalid(false);
+    setLabelInput({ label: "", isInvalid: false, });
+    setMoveInput({ parent_id: "", isInvalid: false, });
     setModalKind(0);
     setIsMenuOpen(null);
   };
 
   async function updateNodeLabel(node_id: string, label: string) {
     if (!label) {
-      setIsInvalid(true);
+      setLabelInput({ ...labelInput, isInvalid: true, });
       throw new Error("label is invalid");
     }
 
@@ -65,7 +71,7 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
 
   async function updateMoveNode(node_id: string, parent_id: string = "") {
     if (!parent_id) {
-      setIsInvalid(true);
+      setMoveInput({ ...moveInput, isInvalid: true });
       throw new Error("destination is invalid");
     }
 
@@ -174,13 +180,13 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
           <TextField
             label="ラベルを入力してください"
             variant="standard"
-            value={newLabel}
-            onChange={(e) => setNewLabel(e.target.value)}
+            value={labelInput.label}
+            onChange={(e) => setLabelInput({ ...labelInput, label: e.target.value })}
             sx={{ width: 300 }}
           />
         </DialogContent>
 
-        {isInvalid &&
+        {labelInput.isInvalid &&
           <Alert severity="error" sx={{ mx: 3 }}>
             ラベルを入力してください。
           </Alert>
@@ -189,7 +195,7 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
         <DialogActions>
           <Button
             autoFocus
-            onClick={() => updateNodeLabel(props.node_id, newLabel)}
+            onClick={() => updateNodeLabel(props.node_id, labelInput.label)}
           >
             OK
           </Button>
@@ -206,8 +212,8 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
 
         <DialogContent>
           <Select
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
+            value={moveInput.parent_id}
+            onChange={(e) => setMoveInput({ ...moveInput, parent_id: e.target.value })}
             sx={{ width: 300 }}
           >
             {node_list.map((node) => (
@@ -218,7 +224,7 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
           </Select>
         </DialogContent>
 
-        {isInvalid &&
+        {moveInput.isInvalid &&
           <Alert severity="error" sx={{ mx: 3 }}>
             移動先を選択してください。
           </Alert>
@@ -227,7 +233,7 @@ function EditorHeader(props: { node_id: string, tree: Tree, text: string }) {
         <DialogActions>
           <Button
             autoFocus
-            onClick={() => updateMoveNode(props.node_id, destination)}
+            onClick={() => updateMoveNode(props.node_id, moveInput.parent_id)}
           >
             OK
           </Button>
