@@ -2,7 +2,8 @@ import {
   Avatar, IconButton, Menu, MenuItem, Tooltip
 } from "@mui/material";
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+
+import type { Tree } from "@/src/lib/types";
 
 import RequestHandler from "@/src/lib/request_handler";
 import loadingState from "@/src/store/loading_store";
@@ -10,12 +11,24 @@ import userStore from '@/src/store/user_store';
 
 
 function Profile() {
-  const navigate = useNavigate();
-  const { email, id_token } = userStore();
+  const { email, id_token, setTree } = userStore();
   const { setLoading } = loadingState();
   const [isMenuOpen, setIsMenuOpen] = useState<null | HTMLElement>(null);
 
   const requests = new RequestHandler(id_token);
+
+  async function clickReload() {
+    setIsMenuOpen(null);
+    setLoading(true);
+
+    const res = await requests.get<Tree>(
+      `${import.meta.env.VITE_API_HOST}/api/tree`,
+    );
+
+    setTree(res.body);
+    setLoading(false);
+    window.location.reload();
+  };
 
   async function clickSignout() {
     setIsMenuOpen(null);
@@ -26,7 +39,7 @@ function Profile() {
     );
 
     setLoading(false);
-    navigate("/");
+    window.location.href = "/";
   };
 
   return (
@@ -60,6 +73,9 @@ function Profile() {
         }}
       >
 
+        <MenuItem onClick={clickReload} sx={{ fontSize: "80%" }}>
+          リロード
+        </MenuItem>
         <MenuItem onClick={clickSignout} sx={{ fontSize: "80%" }}>
           サインアウト
         </MenuItem>
