@@ -5,9 +5,9 @@
 
 ## Summary
 - markdown管理アプリ用のPublicRepository
-- Serverless Architectureを使用した、シンプルなFrontend/Backend構成
+- Frontend/Backend共にServerless Architectureを使用
 - App URL: https://www.cloudjex.com
-- OpenAPI: https://api.cloudjex.com/docs#
+- OpenAPI: https://api.cloudjex.com/docs
 
 ## System Overview
 以下のFramework/技術要素を使用
@@ -72,6 +72,7 @@ cd ./fastapi
 pip install -r requirements.txt
 uvicorn app:app --reload
 ```
+
 React in local
 ```sh
 cd ./react
