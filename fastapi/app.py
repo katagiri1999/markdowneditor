@@ -118,6 +118,9 @@ async def func_signin_post(req: schema.SignInReq):
     tags=["Auth"],
     summary="Sign up",
     response_model=schema.ResultRes,
+    responses={
+        409: {"description": "ConflictError"}
+    },
 )
 async def func_signup_post(req: schema.SignUpReq):
     return func_signup.post(req.email, req.password)
@@ -128,7 +131,10 @@ async def func_signup_post(req: schema.SignUpReq):
     tags=["Auth"],
     summary="Email verification",
     response_model=schema.ResultRes,
-    responses={401: {"description": "UnauthorizedError"}},
+    responses={
+        401: {"description": "UnauthorizedError"},
+        404: {"description": "NotFoundError"},
+    },
 )
 async def func_signup_verify_post(req: schema.SignUpVerifyReq):
     return func_signup_verify.post(req.email, req.otp)
@@ -150,7 +156,10 @@ async def func_signout_post(jwt: dict = Depends(verify_token)):
     tags=["Tree"],
     summary="Get tree",
     response_model=schema.Tree,
-    responses={401: {"description": "UnauthorizedError"}},
+    responses={
+        401: {"description": "UnauthorizedError"},
+        404: {"description": "NotFoundError"},
+    },
 )
 async def func_tree_get(jwt: dict = Depends(verify_token)):
     return func_tree.get(jwt["email"])
@@ -161,7 +170,10 @@ async def func_tree_get(jwt: dict = Depends(verify_token)):
     tags=["Tree"],
     summary="Update tree, Insert node",
     response_model=schema.Tree,
-    responses={401: {"description": "UnauthorizedError"}},
+    responses={
+        401: {"description": "UnauthorizedError"},
+        404: {"description": "NotFoundError"},
+    },
 )
 async def func_tree_node_post(req: schema.TreeNodePostReq, jwt: dict = Depends(verify_token),):
     return func_tree_node.post(jwt["email"], req.parent_id, req.label)
@@ -174,7 +186,8 @@ async def func_tree_node_post(req: schema.TreeNodePostReq, jwt: dict = Depends(v
     response_model=schema.Tree,
     responses={
         401: {"description": "UnauthorizedError"},
-        403: {"description": "ForbiddenError"}
+        403: {"description": "ForbiddenError"},
+        404: {"description": "NotFoundError"},
     },
 )
 async def func_tree_node_delete(node_id: str, jwt: dict = Depends(verify_token)):
@@ -186,7 +199,10 @@ async def func_tree_node_delete(node_id: str, jwt: dict = Depends(verify_token))
     tags=["Tree"],
     summary="Update tree, Update label of node",
     response_model=schema.Tree,
-    responses={401: {"description": "UnauthorizedError"}},
+    responses={
+        401: {"description": "UnauthorizedError"},
+        404: {"description": "NotFoundError"},
+    },
 )
 async def func_tree_node_label_put(node_id: str, req: schema.TreeNodeLabelPutReq, jwt: dict = Depends(verify_token),):
     return func_tree_node_label.put(jwt["email"], node_id, req.label)
@@ -199,7 +215,8 @@ async def func_tree_node_label_put(node_id: str, req: schema.TreeNodeLabelPutReq
     response_model=schema.Tree,
     responses={
         401: {"description": "UnauthorizedError"},
-        403: {"description": "ForbiddenError"}
+        403: {"description": "ForbiddenError"},
+        404: {"description": "NotFoundError"},
     },
 )
 async def func_tree_node_move_put(node_id: str, req: schema.TreeNodeMovePutReq, jwt: dict = Depends(verify_token),):
@@ -211,7 +228,10 @@ async def func_tree_node_move_put(node_id: str, req: schema.TreeNodeMovePutReq, 
     tags=["Node"],
     summary="Get nodes",
     response_model=schema.NodesRes,
-    responses={401: {"description": "UnauthorizedError"}},
+    responses={
+        401: {"description": "UnauthorizedError"},
+        404: {"description": "NotFoundError"},
+    },
 )
 async def func_get_nodes(jwt: dict = Depends(verify_token)):
     return func_nodes.get(jwt["email"], None)
@@ -222,7 +242,10 @@ async def func_get_nodes(jwt: dict = Depends(verify_token)):
     tags=["Node"],
     summary="Get node",
     response_model=schema.NodeRes,
-    responses={401: {"description": "UnauthorizedError"}},
+    responses={
+        401: {"description": "UnauthorizedError"},
+        404: {"description": "NotFoundError"},
+    },
 )
 async def func_get_node(node_id: str,  jwt: dict = Depends(verify_token)):
     return func_nodes.get(jwt["email"], node_id)
@@ -233,7 +256,10 @@ async def func_get_node(node_id: str,  jwt: dict = Depends(verify_token)):
     tags=["Node"],
     summary="Put node",
     response_model=schema.NodeRes,
-    responses={401: {"description": "UnauthorizedError"}},
+    responses={
+        401: {"description": "UnauthorizedError"},
+        404: {"description": "NotFoundError"},
+    },
 )
 async def func_update_nodes(node_id: str, req: schema.NodePutReq, jwt: dict = Depends(verify_token)):
     return func_nodes.put(jwt["email"], node_id, req.text)
