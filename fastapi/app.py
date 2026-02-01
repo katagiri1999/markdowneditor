@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from funcs import (func_nodes, func_signin, func_signout, func_signup,
                    func_signup_verify, func_tree, func_tree_node,
-                   func_tree_node_label, func_tree_node_move, func_users)
+                   func_tree_node_label, func_tree_node_move, func_users_me)
 from funcs.utilities import errors
 from funcs.utilities.jwt_client import JwtClient
 
@@ -78,6 +78,11 @@ async def verify_token(request: Request) -> dict:
 
 
 # =============== Exception Hander ===============
+@app.exception_handler(errors.BadRequestError)
+async def bad_request_exception_handler(_, exc: errors.BadRequestError):
+    return JSONResponse(status_code=400, content={"detail": exc.error_code})
+
+
 @app.exception_handler(errors.UnauthorizedError)
 async def unauthorized_exception_handler(_, exc: errors.UnauthorizedError):
     return JSONResponse(status_code=401, content={"detail": exc.error_code})
@@ -157,14 +162,29 @@ async def func_signout_post(jwt: dict = Depends(verify_token)):
     path="/api/users/me",
     tags=["User"],
     summary="Get your user info",
-    response_model=schema.UserGetReq,
+    response_model=schema.UserReq,
     responses={
         401: {"description": "UnauthorizedError"},
         404: {"description": "NotFoundError"},
     },
 )
-async def func_users_get(jwt: dict = Depends(verify_token)):
-    return func_users.get(jwt["email"])
+async def func_users_me_get(jwt: dict = Depends(verify_token)):
+    return func_users_me.get(jwt["email"])
+
+
+@app.put(
+    path="/api/users/me/password",
+    tags=["User"],
+    summary="Update your password",
+    response_model=schema.ResultRes,
+    responses={
+        400: {"description": "BadRequestError"},
+        401: {"description": "UnauthorizedError"},
+        404: {"description": "NotFoundError"},
+    },
+)
+async def func_users_me_password_put(req: schema.UpdatePasswordReq, jwt: dict = Depends(verify_token)):
+    return func_users_me.put(jwt["email"], req.old_password, req.new_password)
 
 
 @app.get(
