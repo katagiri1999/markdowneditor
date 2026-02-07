@@ -115,7 +115,7 @@ async def conflict_exception_handler(_, exc: errors.ConflictError):
     },
 )
 async def func_signin_post(req: schema.SignInReq):
-    return func_signin.post(req.email, req.password)
+    return func_signin.signin(req.email, req.password)
 
 
 @app.post(
@@ -128,7 +128,7 @@ async def func_signin_post(req: schema.SignInReq):
     },
 )
 async def func_signup_post(req: schema.SignUpReq):
-    return func_signup.post(req.email, req.password)
+    return func_signup.signup(req.email, req.password)
 
 
 @app.post(
@@ -142,7 +142,7 @@ async def func_signup_post(req: schema.SignUpReq):
     },
 )
 async def func_signup_verify_post(req: schema.SignUpVerifyReq):
-    return func_signup_verify.post(req.email, req.otp)
+    return func_signup_verify.verify(req.email, req.otp)
 
 
 @app.post(
@@ -155,7 +155,7 @@ async def func_signup_verify_post(req: schema.SignUpVerifyReq):
     },
 )
 async def func_signout_post(jwt: dict = Depends(verify_token)):
-    return func_signout.post()
+    return func_signout.signout()
 
 
 @app.get(
@@ -169,7 +169,7 @@ async def func_signout_post(jwt: dict = Depends(verify_token)):
     },
 )
 async def func_users_me_get(jwt: dict = Depends(verify_token)):
-    return func_users_me.get(jwt["email"])
+    return func_users_me.get_myuser(jwt["email"])
 
 
 @app.put(
@@ -184,7 +184,7 @@ async def func_users_me_get(jwt: dict = Depends(verify_token)):
     },
 )
 async def func_users_me_password_put(req: schema.UpdatePasswordReq, jwt: dict = Depends(verify_token)):
-    return func_users_me.put(jwt["email"], req.old_password, req.new_password)
+    return func_users_me.update_mypw(jwt["email"], req.old_password, req.new_password)
 
 
 @app.get(
@@ -198,7 +198,7 @@ async def func_users_me_password_put(req: schema.UpdatePasswordReq, jwt: dict = 
     },
 )
 async def func_tree_get(jwt: dict = Depends(verify_token)):
-    return func_tree.get(jwt["email"])
+    return func_tree.get_tree(jwt["email"])
 
 
 @app.post(
@@ -212,7 +212,7 @@ async def func_tree_get(jwt: dict = Depends(verify_token)):
     },
 )
 async def func_tree_node_post(req: schema.TreeNodePostReq, jwt: dict = Depends(verify_token),):
-    return func_tree_node.post(jwt["email"], req.parent_id, req.label)
+    return func_tree_node.post_node(jwt["email"], req.parent_id, req.label)
 
 
 @app.delete(
@@ -227,7 +227,7 @@ async def func_tree_node_post(req: schema.TreeNodePostReq, jwt: dict = Depends(v
     },
 )
 async def func_tree_node_delete(node_id: str, jwt: dict = Depends(verify_token)):
-    return func_tree_node.delete(jwt["email"], node_id)
+    return func_tree_node.delete_node(jwt["email"], node_id)
 
 
 @app.put(
@@ -241,7 +241,7 @@ async def func_tree_node_delete(node_id: str, jwt: dict = Depends(verify_token))
     },
 )
 async def func_tree_node_label_put(node_id: str, req: schema.TreeNodeLabelPutReq, jwt: dict = Depends(verify_token),):
-    return func_tree_node_label.put(jwt["email"], node_id, req.label)
+    return func_tree_node_label.update_node_label(jwt["email"], node_id, req.label)
 
 
 @app.put(
@@ -256,7 +256,7 @@ async def func_tree_node_label_put(node_id: str, req: schema.TreeNodeLabelPutReq
     },
 )
 async def func_tree_node_move_put(node_id: str, req: schema.TreeNodeMovePutReq, jwt: dict = Depends(verify_token),):
-    return func_tree_node_move.put(jwt["email"], node_id, req.parent_id)
+    return func_tree_node_move.node_move(jwt["email"], node_id, req.parent_id)
 
 
 @app.get(
@@ -270,7 +270,7 @@ async def func_tree_node_move_put(node_id: str, req: schema.TreeNodeMovePutReq, 
     },
 )
 async def func_get_nodes(jwt: dict = Depends(verify_token)):
-    return func_nodes.get(jwt["email"], None)
+    return func_nodes.get_nodes(jwt["email"])
 
 
 @app.get(
@@ -284,7 +284,7 @@ async def func_get_nodes(jwt: dict = Depends(verify_token)):
     },
 )
 async def func_get_node(node_id: str,  jwt: dict = Depends(verify_token)):
-    return func_nodes.get(jwt["email"], node_id)
+    return func_nodes.get_node(jwt["email"], node_id)
 
 
 @app.put(
@@ -298,4 +298,4 @@ async def func_get_node(node_id: str,  jwt: dict = Depends(verify_token)):
     },
 )
 async def func_update_nodes(node_id: str, req: schema.NodePutReq, jwt: dict = Depends(verify_token)):
-    return func_nodes.put(jwt["email"], node_id, req.text)
+    return func_nodes.put_node(jwt["email"], node_id, req.text)

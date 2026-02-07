@@ -3,7 +3,7 @@ from funcs.utilities.bcrypt_hash import Bcrypt
 from funcs.utilities.dynamodb_client import DynamoDBClient
 
 
-def get(email: str) -> dict:
+def get_myuser(email: str) -> dict:
     db_client = DynamoDBClient()
     user = db_client.get_user(email)
     if not user:
@@ -12,7 +12,7 @@ def get(email: str) -> dict:
     return user.to_dict(include_pw=False)
 
 
-def put(email: str, old_password: str, new_password: str) -> dict:
+def update_mypw(email: str, old_password: str, new_password: str) -> dict:
     db_client = DynamoDBClient()
     user = db_client.get_user(email)
     if not user:

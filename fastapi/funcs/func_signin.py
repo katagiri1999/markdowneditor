@@ -4,7 +4,7 @@ from funcs.utilities.dynamodb_client import DynamoDBClient
 from funcs.utilities.jwt_client import JwtClient
 
 
-def post(email: str, password: str) -> dict:
+def signin(email: str, password: str) -> dict:
     db_client = DynamoDBClient()
     user = db_client.get_user(email=email)
 

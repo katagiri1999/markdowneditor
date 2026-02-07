@@ -7,7 +7,7 @@ from funcs.utilities.dynamodb_client import DynamoDBClient
 from funcs.utilities.tree_handler import TreeHandler
 
 
-def post(email: str, parent_id: str, label: str) -> dict:
+def post_node(email: str, parent_id: str, label: str) -> dict:
     db_client = DynamoDBClient()
 
     tree_info = db_client.get_tree_info(email)
@@ -39,7 +39,7 @@ def post(email: str, parent_id: str, label: str) -> dict:
     return new_tree
 
 
-def delete(email: str, node_id: str) -> dict:
+def delete_node(email: str, node_id: str) -> dict:
     db_client = DynamoDBClient()
 
     tree_info = db_client.get_tree_info(email)

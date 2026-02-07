@@ -6,7 +6,7 @@ from funcs.utilities import errors
 from funcs.utilities.dynamodb_client import DynamoDBClient
 
 
-def post(email: str, otp: str) -> dict:
+def verify(email: str, otp: str) -> dict:
     db_client = DynamoDBClient()
     user = db_client.get_user(email)
     if not user:

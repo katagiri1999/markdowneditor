@@ -2,7 +2,7 @@ from funcs.utilities import errors
 from funcs.utilities.dynamodb_client import DynamoDBClient
 
 
-def get(email: str) -> dict:
+def get_tree(email: str) -> dict:
     db_client = DynamoDBClient()
     tree_info = db_client.get_tree_info(email=email)
     if not tree_info:

@@ -7,7 +7,7 @@ from funcs.utilities.dynamodb_client import DynamoDBClient
 from funcs.utilities.smtp_client import SmtpClient
 
 
-def post(email: str, password: str) -> dict:
+def signup(email: str, password: str) -> dict:
     db_client = DynamoDBClient()
     user = db_client.get_user(email)
     if user and user.options.enabled:
