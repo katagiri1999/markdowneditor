@@ -13,28 +13,19 @@ def post_node(user_group: str, parent_id: str, label: str) -> dict:
     tree_info = db_client.get_tree_info(user_group)
 
     insert_id = str(uuid.uuid4())
-    insert_node = {
-        "node_id": insert_id,
-        "label": label,
-        "children": [],
-    }
+    insert_node = Tree(insert_id, label, [])
 
-    tree_handler = TreeHandler(tree_info.tree.to_dict())
+    tree_handler = TreeHandler(tree_info.tree)
     tree_handler.insert_node(parent_id, insert_node)
     new_tree = tree_handler.sort_tree()
-
-    tree_info.tree = Tree(
-        new_tree["node_id"],
-        new_tree["label"],
-        new_tree["children"]
-    )
+    tree_info.tree = new_tree
 
     new_node = Node(user_group, insert_id, "")
 
     db_client.put_tree_info(tree_info)
     db_client.put_node(new_node)
 
-    return new_tree
+    return new_tree.to_dict()
 
 
 def delete_node(user_group: str, node_id: str) -> dict:
@@ -42,12 +33,12 @@ def delete_node(user_group: str, node_id: str) -> dict:
 
     tree_info = db_client.get_tree_info(user_group)
 
-    tree_handler = TreeHandler(tree_info.tree.to_dict())
+    tree_handler = TreeHandler(tree_info.tree)
 
     node = tree_handler.recursive_get(node_id)
     if not node:
         raise errors.NotFoundError
-    if node["node_id"] == tree_info.tree.node_id:
+    if node.node_id == tree_info.tree.node_id:
         raise errors.ForbiddenError
 
     del_targets = tree_handler.get_children_ids(node_id)
@@ -55,15 +46,10 @@ def delete_node(user_group: str, node_id: str) -> dict:
 
     tree_handler.del_node(node_id)
     new_tree = tree_handler.sort_tree()
-
-    tree_info.tree = Tree(
-        new_tree["node_id"],
-        new_tree["label"],
-        new_tree["children"]
-    )
+    tree_info.tree = new_tree
 
     for del_id in del_targets:
         db_client.delete_node(Node(user_group, del_id, ""))
     db_client.put_tree_info(tree_info)
 
-    return new_tree
+    return new_tree.to_dict()

@@ -1,4 +1,3 @@
-from funcs.entities.tree import Tree
 from funcs.utilities import errors
 from funcs.utilities.dynamodb_client import DynamoDBClient
 from funcs.utilities.tree_handler import TreeHandler
@@ -13,15 +12,10 @@ def node_move(user_group: str, node_id: str, parent_id: str) -> dict:
     if node_id == root_node_id:
         raise errors.ForbiddenError
 
-    tree_handler = TreeHandler(tree_info.tree.to_dict())
+    tree_handler = TreeHandler(tree_info.tree)
     tree_handler.move_node(parent_id, node_id)
     new_tree = tree_handler.sort_tree()
-
-    tree_info.tree = Tree(
-        new_tree["node_id"],
-        new_tree["label"],
-        new_tree["children"]
-    )
+    tree_info.tree = new_tree
 
     db_client.put_tree_info(tree_info)
-    return new_tree
+    return new_tree.to_dict()
