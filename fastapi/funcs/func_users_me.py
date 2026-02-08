@@ -15,10 +15,10 @@ def update_mypw(email: str, old_password: str, new_password: str) -> dict:
     user = db_client.get_user(email)
 
     if len(new_password) < 4 or len(new_password) > 20:
-        raise errors.BadRequestError("func_users.invalid_password")
+        raise errors.BadRequestError()
 
     if not Bcrypt().verify(old_password, user.password):
-        raise errors.UnauthorizedError("func_users.incorrect_password")
+        raise errors.UnauthorizedError()
 
     hashed_new_password = Bcrypt().hash(new_password)
 

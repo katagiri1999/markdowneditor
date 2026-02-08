@@ -34,7 +34,7 @@ class TreeHandler:
     def get_children_ids(self, node_id: str) -> list[str]:
         target = self.recursive_get(node_id)
         if not target:
-            raise errors.NotFoundError("TreeHandler.not_found")
+            raise errors.NotFoundError()
 
         result = []
 
@@ -49,7 +49,7 @@ class TreeHandler:
     def insert_node(self, parent_id: str, new_node: dict):
         parent_node = self.recursive_get(parent_id)
         if parent_node is None:
-            raise errors.NotFoundError("TreeHandler.not_found")
+            raise errors.NotFoundError()
 
         parent_node["children"].append(new_node)
 
@@ -57,10 +57,10 @@ class TreeHandler:
         target_node = self.recursive_get(node_id)
         parent_node = self.recursive_get(parent_id)
         if target_node is None or parent_node is None:
-            raise errors.NotFoundError("TreeHandler.not_found")
+            raise errors.NotFoundError()
 
         if self.recursive_get(parent_id, target_node) is not None:
-            raise errors.ForbiddenError("TreeHandler.cant_move_to_children")
+            raise errors.ForbiddenError()
 
         self.del_node(node_id)
         parent_node["children"].append(target_node)
@@ -68,14 +68,14 @@ class TreeHandler:
     def update_node_label(self, node_id: str, label: dict):
         node = self.recursive_get(node_id)
         if node is None:
-            raise errors.NotFoundError("TreeHandler.not_found")
+            raise errors.NotFoundError()
 
         node["label"] = label
 
     def del_node(self, node_id: str):
         parent_node = self.get_parent_node(node_id)
         if not parent_node:
-            raise errors.NotFoundError("TreeHandler.not_found")
+            raise errors.NotFoundError()
 
         children: list = parent_node["children"]
         for i, child in enumerate(children):
