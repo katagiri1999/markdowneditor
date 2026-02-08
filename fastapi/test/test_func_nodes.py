@@ -29,7 +29,7 @@ def setup1(id_token, root_node_id):
 
 
 class TestSuccessGet:
-    def test_func_nodes_get_normal(self, id_token):
+    def test_func_nodes_get_nodes(self, id_token):
         res = fa_client.get(
             url="/api/nodes",
             headers={"Authorization": id_token}
@@ -43,7 +43,7 @@ class TestSuccessGet:
         assert type(nodes[0]["node_id"]) is str
         assert type(nodes[0]["text"]) is str
 
-    def test_func_nodes_get_normal_with_id(self, id_token, root_node_id):
+    def test_func_nodes_get_node(self, id_token, root_node_id):
         res = fa_client.get(
             url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
@@ -57,12 +57,26 @@ class TestSuccessGet:
 
 
 class TestFailGet:
-    def test_func_node_get_invalid_token(self, invalid_id_token):
+    def test_func_nodes_get_nodes_invalid_token(self, invalid_id_token):
         res = fa_client.get(
             url="/api/nodes",
             headers={"Authorization": invalid_id_token},
         )
         assert res.status_code == 401
+
+    def test_func_nodes_get_non_exists_node_invalid_token(self, invalid_id_token):
+        res = fa_client.get(
+            url="/api/nodes/nonexists",
+            headers={"Authorization": invalid_id_token},
+        )
+        assert res.status_code == 401
+
+    def test_func_node_get_node_non_exists(self, id_token):
+        res = fa_client.get(
+            url="/api/nodes/nonexists",
+            headers={"Authorization": id_token},
+        )
+        assert res.status_code == 404
 
 
 class TestSuccessPut:
