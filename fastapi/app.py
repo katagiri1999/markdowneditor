@@ -12,7 +12,7 @@ from funcs import (func_nodes, func_signin, func_signout, func_tree,
                    func_tree_node, func_tree_node_label, func_tree_node_move,
                    func_users_me)
 from funcs.utilities import errors
-from funcs.utilities.jwt_client import JwtClient
+from funcs.utilities.jwt_client import Jwt, JwtClient
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -128,8 +128,8 @@ async def func_signin_post(req: schema.SignInReq):
         403: {"description": "ForbiddenError"},
     },
 )
-async def func_signin_group_post(req: schema.SignInGroupReq, jwt: dict = Depends(verify_token)):
-    return func_signin.signin_group(jwt["email"], req.user_group)
+async def func_signin_group_post(req: schema.SignInGroupReq, jwt: Jwt = Depends(verify_token)):
+    return func_signin.signin_group(jwt.email, req.user_group)
 
 
 @app.post(
@@ -141,7 +141,7 @@ async def func_signin_group_post(req: schema.SignInGroupReq, jwt: dict = Depends
         401: {"description": "Unauthorized Error"},
     },
 )
-async def func_signout_post(jwt: dict = Depends(verify_token)):
+async def func_signout_post(jwt: Jwt = Depends(verify_token)):
     return func_signout.signout()
 
 
@@ -154,8 +154,8 @@ async def func_signout_post(jwt: dict = Depends(verify_token)):
         401: {"description": "Unauthorized Error"},
     },
 )
-async def func_users_me_get(jwt: dict = Depends(verify_token)):
-    return func_users_me.get_myuser(jwt["email"])
+async def func_users_me_get(jwt: Jwt = Depends(verify_token)):
+    return func_users_me.get_myuser(jwt.email)
 
 
 @app.put(
@@ -168,8 +168,8 @@ async def func_users_me_get(jwt: dict = Depends(verify_token)):
         401: {"description": "Unauthorized Error"},
     },
 )
-async def func_users_me_password_put(req: schema.UpdatePasswordReq, jwt: dict = Depends(verify_token)):
-    return func_users_me.update_mypw(jwt["email"], req.old_password, req.new_password)
+async def func_users_me_password_put(req: schema.UpdatePasswordReq, jwt: Jwt = Depends(verify_token)):
+    return func_users_me.update_mypw(jwt.email, req.old_password, req.new_password)
 
 
 @app.get(
@@ -181,8 +181,8 @@ async def func_users_me_password_put(req: schema.UpdatePasswordReq, jwt: dict = 
         401: {"description": "Unauthorized Error"},
     },
 )
-async def func_tree_get(jwt: dict = Depends(verify_token)):
-    return func_tree.get_tree(jwt["user_group"])
+async def func_tree_get(jwt: Jwt = Depends(verify_token)):
+    return func_tree.get_tree(jwt.user_group)
 
 
 @app.post(
@@ -195,8 +195,8 @@ async def func_tree_get(jwt: dict = Depends(verify_token)):
         404: {"description": "NotFound Error"},
     },
 )
-async def func_tree_node_post(req: schema.TreeNodePostReq, jwt: dict = Depends(verify_token),):
-    return func_tree_node.post_node(jwt["user_group"], req.parent_id, req.label)
+async def func_tree_node_post(req: schema.TreeNodePostReq, jwt: Jwt = Depends(verify_token),):
+    return func_tree_node.post_node(jwt.user_group, req.parent_id, req.label)
 
 
 @app.delete(
@@ -210,8 +210,8 @@ async def func_tree_node_post(req: schema.TreeNodePostReq, jwt: dict = Depends(v
         404: {"description": "NotFound Error"},
     },
 )
-async def func_tree_node_delete(node_id: str, jwt: dict = Depends(verify_token)):
-    return func_tree_node.delete_node(jwt["user_group"], node_id)
+async def func_tree_node_delete(node_id: str, jwt: Jwt = Depends(verify_token)):
+    return func_tree_node.delete_node(jwt.user_group, node_id)
 
 
 @app.put(
@@ -224,8 +224,8 @@ async def func_tree_node_delete(node_id: str, jwt: dict = Depends(verify_token))
         404: {"description": "NotFound Error"},
     },
 )
-async def func_tree_node_label_put(node_id: str, req: schema.TreeNodeLabelPutReq, jwt: dict = Depends(verify_token),):
-    return func_tree_node_label.update_node_label(jwt["user_group"], node_id, req.label)
+async def func_tree_node_label_put(node_id: str, req: schema.TreeNodeLabelPutReq, jwt: Jwt = Depends(verify_token),):
+    return func_tree_node_label.update_node_label(jwt.user_group, node_id, req.label)
 
 
 @app.put(
@@ -239,8 +239,8 @@ async def func_tree_node_label_put(node_id: str, req: schema.TreeNodeLabelPutReq
         404: {"description": "NotFound Error"},
     },
 )
-async def func_tree_node_move_put(node_id: str, req: schema.TreeNodeMovePutReq, jwt: dict = Depends(verify_token),):
-    return func_tree_node_move.node_move(jwt["user_group"], node_id, req.parent_id)
+async def func_tree_node_move_put(node_id: str, req: schema.TreeNodeMovePutReq, jwt: Jwt = Depends(verify_token),):
+    return func_tree_node_move.node_move(jwt.user_group, node_id, req.parent_id)
 
 
 @app.get(
@@ -252,8 +252,8 @@ async def func_tree_node_move_put(node_id: str, req: schema.TreeNodeMovePutReq, 
         401: {"description": "Unauthorized Error"},
     },
 )
-async def func_get_nodes(jwt: dict = Depends(verify_token)):
-    return func_nodes.get_nodes(jwt["user_group"])
+async def func_get_nodes(jwt: Jwt = Depends(verify_token)):
+    return func_nodes.get_nodes(jwt.user_group)
 
 
 @app.get(
@@ -266,8 +266,8 @@ async def func_get_nodes(jwt: dict = Depends(verify_token)):
         404: {"description": "NotFound Error"},
     },
 )
-async def func_get_node(node_id: str,  jwt: dict = Depends(verify_token)):
-    return func_nodes.get_node(jwt["user_group"], node_id)
+async def func_get_node(node_id: str,  jwt: Jwt = Depends(verify_token)):
+    return func_nodes.get_node(jwt.user_group, node_id)
 
 
 @app.put(
@@ -280,5 +280,5 @@ async def func_get_node(node_id: str,  jwt: dict = Depends(verify_token)):
         404: {"description": "NotFound Error"},
     },
 )
-async def func_update_nodes(node_id: str, req: schema.NodePutReq, jwt: dict = Depends(verify_token)):
-    return func_nodes.put_node(jwt["user_group"], node_id, req.text)
+async def func_update_nodes(node_id: str, req: schema.NodePutReq, jwt: Jwt = Depends(verify_token)):
+    return func_nodes.put_node(jwt.user_group, node_id, req.text)
