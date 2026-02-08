@@ -8,8 +8,6 @@ def node_move(user_group: str, node_id: str, parent_id: str) -> dict:
     db_client = DynamoDBClient()
 
     tree_info = db_client.get_tree_info(user_group)
-    if not tree_info:
-        raise errors.NotFoundError("func_tree_node.not_found")
 
     root_node_id = tree_info.tree.node_id
     if node_id == root_node_id:

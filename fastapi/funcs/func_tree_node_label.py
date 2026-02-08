@@ -8,8 +8,6 @@ def update_node_label(user_group: str, node_id: str, label: str) -> dict:
     db_client = DynamoDBClient()
 
     tree_info = db_client.get_tree_info(user_group)
-    if not tree_info:
-        raise errors.NotFoundError("func_tree_node_label.not_found")
 
     tree_handler = TreeHandler(tree_info.tree.to_dict())
     tree_handler.update_node_label(node_id, label)

@@ -17,9 +17,6 @@ def get_nodes(user_group: str) -> dict:
     db_client = DynamoDBClient()
 
     items = db_client.get_nodes(user_group)
-    if not items:
-        raise errors.NotFoundError("func_nodes.not_found")
-
     json_items = [i.to_dict() for i in items]
     return {"nodes": json_items}
 

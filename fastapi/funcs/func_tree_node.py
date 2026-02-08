@@ -11,8 +11,6 @@ def post_node(user_group: str, parent_id: str, label: str) -> dict:
     db_client = DynamoDBClient()
 
     tree_info = db_client.get_tree_info(user_group)
-    if not tree_info:
-        raise errors.NotFoundError("func_tree_node.not_found")
 
     insert_id = str(uuid.uuid4())
     insert_node = {
@@ -43,8 +41,6 @@ def delete_node(user_group: str, node_id: str) -> dict:
     db_client = DynamoDBClient()
 
     tree_info = db_client.get_tree_info(user_group)
-    if not tree_info:
-        raise errors.NotFoundError("func_tree_node.not_found")
 
     tree_handler = TreeHandler(tree_info.tree.to_dict())
 

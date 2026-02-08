@@ -121,10 +121,11 @@ async def func_signin_post(req: schema.SignInReq):
 @app.post(
     path="/api/signin/group",
     tags=["Auth"],
-    summary="Sign in with user group",
+    summary="Sign in to user group",
     response_model=schema.SignInRes,
     responses={
         401: {"description": "Unauthorized Error"},
+        403: {"description": "ForbiddenError"},
     },
 )
 async def func_signin_group_post(req: schema.SignInGroupReq, jwt: dict = Depends(verify_token)):
@@ -151,7 +152,6 @@ async def func_signout_post(jwt: dict = Depends(verify_token)):
     response_model=schema.UserReq,
     responses={
         401: {"description": "Unauthorized Error"},
-        404: {"description": "NotFound Error"},
     },
 )
 async def func_users_me_get(jwt: dict = Depends(verify_token)):
@@ -166,7 +166,6 @@ async def func_users_me_get(jwt: dict = Depends(verify_token)):
     responses={
         400: {"description": "BadRequest Error"},
         401: {"description": "Unauthorized Error"},
-        404: {"description": "NotFound Error"},
     },
 )
 async def func_users_me_password_put(req: schema.UpdatePasswordReq, jwt: dict = Depends(verify_token)):
@@ -180,7 +179,6 @@ async def func_users_me_password_put(req: schema.UpdatePasswordReq, jwt: dict = 
     response_model=schema.Tree,
     responses={
         401: {"description": "Unauthorized Error"},
-        404: {"description": "NotFound Error"},
     },
 )
 async def func_tree_get(jwt: dict = Depends(verify_token)):
@@ -252,7 +250,6 @@ async def func_tree_node_move_put(node_id: str, req: schema.TreeNodeMovePutReq, 
     response_model=schema.NodesRes,
     responses={
         401: {"description": "Unauthorized Error"},
-        404: {"description": "NotFound Error"},
     },
 )
 async def func_get_nodes(jwt: dict = Depends(verify_token)):
