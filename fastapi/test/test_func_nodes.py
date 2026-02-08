@@ -1,6 +1,31 @@
-import textwrap
+import pytest
 
 from .conftest import fa_client
+
+
+@pytest.fixture()
+def setup1(id_token, root_node_id):
+    # Backup current text
+    print("\nsetup...")
+    res = fa_client.get(
+        url=f"/api/nodes/{root_node_id}",
+        headers={"Authorization": id_token},
+    )
+    assert res.status_code == 200
+    before = res.json()["text"]
+
+    yield
+
+    # Restore previous text
+    print("\nteardown...")
+    res = fa_client.put(
+        url=f"/api/nodes/{root_node_id}",
+        headers={"Authorization": id_token},
+        json={
+            "text": f"{before}",
+        }
+    )
+    assert res.status_code == 200
 
 
 class TestSuccessGet:
@@ -55,32 +80,13 @@ class TestFailGet:
 
 
 class TestSuccessPut:
-    def test_func_nodes_put_normal(self, id_token, root_node_id):
-        # First, get the current text
-        res = fa_client.get(
-            url=f"/api/nodes/{root_node_id}",
-            headers={"Authorization": id_token},
-        )
-        assert res.status_code == 200
-        before = res.json()["text"]
-
-        # Test
-        text = """
-            # MarkdownEditor
-
-            ## CICD Status
-            [![CICD Workflow](https://github.com/cloudjex/markdowneditor/actions/workflows/cicd.yaml/badge.svg)](https://github.com/cloudjex/markdowneditor/actions/workflows/cicd.yaml)
-
-            ## Sample Application URL
-            https://www.cloudjex.com
-        """
-        text = textwrap.dedent(text).strip("\n")
-
+    def test_func_nodes_put_normal(self, id_token, root_node_id, setup1):
+        text = "test text"
         res = fa_client.put(
             url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
             json={
-                "text": f"{text}",
+                "text": text,
             }
         )
         assert res.status_code == 200
@@ -91,26 +97,7 @@ class TestSuccessPut:
         assert type(body["node_id"]) is str
         assert type(body["email"]) is str
 
-        # Restore previous text
-        res = fa_client.put(
-            url=f"/api/nodes/{root_node_id}",
-            headers={"Authorization": id_token},
-            json={
-                "text": f"{before}",
-            }
-        )
-        assert res.status_code == 200
-
-    def test_func_nodes_put_empty_text(self, id_token, root_node_id):
-        # First, get the current text
-        res = fa_client.get(
-            url=f"/api/nodes/{root_node_id}",
-            headers={"Authorization": id_token},
-        )
-        assert res.status_code == 200
-        before = res.json()["text"]
-
-        # Test
+    def test_func_nodes_put_empty_text(self, id_token, root_node_id, setup1):
         res = fa_client.put(
             url=f"/api/nodes/{root_node_id}",
             headers={"Authorization": id_token},
@@ -125,16 +112,6 @@ class TestSuccessPut:
         assert body["text"] == ""
         assert type(body["node_id"]) is str
         assert type(body["email"]) is str
-
-        # Restore previous text
-        res = fa_client.put(
-            url=f"/api/nodes/{root_node_id}",
-            headers={"Authorization": id_token},
-            json={
-                "text": f"{before}",
-            }
-        )
-        assert res.status_code == 200
 
 
 class TestFailPut:

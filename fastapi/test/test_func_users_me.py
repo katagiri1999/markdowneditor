@@ -1,4 +1,29 @@
+import pytest
+
 from .conftest import EMAIL, PASSWORD, fa_client
+
+
+@pytest.fixture()
+def setup1(id_token):
+    print("\nsetup...")
+    # Return new pw
+    new_password = "NewTestPassword123!"
+    yield new_password
+
+    # Clean up
+    print("\nteardown...")
+    res = fa_client.put(
+        url="/api/users/me/password",
+        headers={"Authorization": id_token},
+        json={
+            "old_password": new_password,
+            "new_password": PASSWORD,
+        }
+    )
+    assert res.status_code == 200
+
+    body = res.json()
+    assert body["result"] == "success"
 
 
 class TestSuccessGet:
@@ -34,27 +59,15 @@ class TestFailGet:
 
 
 class TestSuccessPut:
-    def test_func_users_me_put_pw(self, id_token):
+    def test_func_users_me_put_pw(self, id_token, setup1):
+        new_password = setup1
+
         res = fa_client.put(
             url="/api/users/me/password",
             headers={"Authorization": id_token},
             json={
                 "old_password": PASSWORD,
-                "new_password": "NewTestPassword123!",
-            }
-        )
-        assert res.status_code == 200
-
-        body = res.json()
-        assert body["result"] == "success"
-
-        # Clean up
-        res = fa_client.put(
-            url="/api/users/me/password",
-            headers={"Authorization": id_token},
-            json={
-                "old_password": "NewTestPassword123!",
-                "new_password": PASSWORD,
+                "new_password": new_password,
             }
         )
         assert res.status_code == 200

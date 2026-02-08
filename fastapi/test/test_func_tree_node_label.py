@@ -1,25 +1,44 @@
 import time
 
+import pytest
+
 from .conftest import fa_client
 
 
+@pytest.fixture()
+def setup1(id_token, root_node_id):
+    # Get current tree root label
+    print("\nsetup...")
+    res = fa_client.get(
+        url=f"/api/tree",
+        headers={"Authorization": id_token},
+    )
+    assert res.status_code == 200
+    body = res.json()
+    root_label = body["label"]
+
+    yield
+
+    # Restore previous tree root label
+    print("\nteardown...")
+    res = fa_client.put(
+        url=f"/api/tree/node/label/{root_node_id}",
+        headers={"Authorization": id_token},
+        json={
+            "label": root_label,
+        }
+    )
+    assert res.status_code == 200
+
+    body = res.json()
+    assert body["label"] == root_label
+
+
 class TestSuccessPut:
-    def test_func_tree_node_label_put_normal(self, id_token):
-        # Get tree
-        res = fa_client.get(
-            url=f"/api/tree",
-            headers={"Authorization": id_token},
-        )
-        assert res.status_code == 200
-
-        body = res.json()
-        root_id = body["node_id"]
-        root_label = body["label"]
-
-        # Test
+    def test_func_tree_node_label_put_normal(self, id_token, root_node_id, setup1):
         new_label = str(time.time())
         res = fa_client.put(
-            url=f"/api/tree/node/label/{root_id}",
+            url=f"/api/tree/node/label/{root_node_id}",
             headers={"Authorization": id_token},
             json={
                 "label": new_label,
@@ -32,19 +51,6 @@ class TestSuccessPut:
         assert type(body["node_id"]) is str
         assert type(body["label"]) is str
         assert type(body["children"]) is list
-
-        # Reset
-        res = fa_client.put(
-            url=f"/api/tree/node/label/{root_id}",
-            headers={"Authorization": id_token},
-            json={
-                "label": root_label,
-            }
-        )
-        assert res.status_code == 200
-
-        body = res.json()
-        assert body["label"] == root_label
 
 
 class TestFailPut:
