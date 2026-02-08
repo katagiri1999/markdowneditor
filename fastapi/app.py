@@ -121,7 +121,7 @@ async def func_signin_post(req: schema.SignInReq):
 @app.post(
     path="/api/signin/group",
     tags=["Auth"],
-    summary="Sign in with user group",
+    summary="Sign in to user group",
     response_model=schema.SignInRes,
     responses={
         401: {"description": "Unauthorized Error"},
