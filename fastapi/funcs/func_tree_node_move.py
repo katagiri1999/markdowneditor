@@ -11,7 +11,7 @@ def node_move(user_group: str, node_id: str, parent_id: str) -> dict:
 
     root_node_id = tree_info.tree.node_id
     if node_id == root_node_id:
-        raise errors.ForbiddenError()
+        raise errors.ForbiddenError
 
     tree_handler = TreeHandler(tree_info.tree.to_dict())
     tree_handler.move_node(parent_id, node_id)

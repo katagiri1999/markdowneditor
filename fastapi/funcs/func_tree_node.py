@@ -46,9 +46,9 @@ def delete_node(user_group: str, node_id: str) -> dict:
 
     node = tree_handler.recursive_get(node_id)
     if not node:
-        raise errors.NotFoundError()
+        raise errors.NotFoundError
     if node["node_id"] == tree_info.tree.node_id:
-        raise errors.ForbiddenError()
+        raise errors.ForbiddenError
 
     del_targets = tree_handler.get_children_ids(node_id)
     del_targets.append(node_id)
