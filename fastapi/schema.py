@@ -11,16 +11,6 @@ class SignInReq(BaseModel):
     password: str
 
 
-class SignUpReq(BaseModel):
-    email: str
-    password: str
-
-
-class SignUpVerifyReq(BaseModel):
-    email: str
-    otp: str
-
-
 class UserReq(BaseModel):
     email: str
     password: str
@@ -29,6 +19,7 @@ class UserReq(BaseModel):
     class Options(BaseModel):
         enabled: bool
         otp: str
+        user_group: List[str]
 
 
 class UpdatePasswordReq(BaseModel):

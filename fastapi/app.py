@@ -8,9 +8,9 @@ import schema
 from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from funcs import (func_nodes, func_signin, func_signout, func_signup,
-                   func_signup_verify, func_tree, func_tree_node,
-                   func_tree_node_label, func_tree_node_move, func_users_me)
+from funcs import (func_nodes, func_signin, func_signout, func_tree,
+                   func_tree_node, func_tree_node_label, func_tree_node_move,
+                   func_users_me)
 from funcs.utilities import errors
 from funcs.utilities.jwt_client import JwtClient
 
@@ -116,33 +116,6 @@ async def conflict_exception_handler(_, exc: errors.ConflictError):
 )
 async def func_signin_post(req: schema.SignInReq):
     return func_signin.signin(req.email, req.password)
-
-
-@app.post(
-    path="/api/signup",
-    tags=["Auth"],
-    summary="Sign up",
-    response_model=schema.ResultRes,
-    responses={
-        409: {"description": "Conflict Error"},
-    },
-)
-async def func_signup_post(req: schema.SignUpReq):
-    return func_signup.signup(req.email, req.password)
-
-
-@app.post(
-    path="/api/signup/verify",
-    tags=["Auth"],
-    summary="Email verification",
-    response_model=schema.ResultRes,
-    responses={
-        401: {"description": "Unauthorized Error"},
-        404: {"description": "NotFound Error"},
-    },
-)
-async def func_signup_verify_post(req: schema.SignUpVerifyReq):
-    return func_signup_verify.verify(req.email, req.otp)
 
 
 @app.post(
